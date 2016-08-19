@@ -1,0 +1,15 @@
+---
+
+- name: Create Prometheus upstart directory
+  file:
+    dest: "/etc/init"
+    state: directory
+    recurse: yes
+
+- name: Template Prometheus upstart service file
+  register: upstart_service_template
+  template:
+    src: "prometheus.conf.j2"
+    dest: "/etc/init/prometheus.conf"
+  notify:
+    - restart prometheus

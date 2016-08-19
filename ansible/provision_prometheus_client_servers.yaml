@@ -1,0 +1,8 @@
+---
+
+- name: Provision Prometheus client servers
+  hosts: prometheus_client_servers
+  become: yes
+  become_user: root
+  roles:
+    - role: prometheus_node_exporter

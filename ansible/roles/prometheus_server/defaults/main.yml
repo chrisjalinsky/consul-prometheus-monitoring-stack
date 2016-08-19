@@ -1,0 +1,29 @@
+---
+
+prometheus_server_version: "1.0.1"
+prometheus_server_bin_dir: "/usr/local/bin"
+prometheus_server_config_dir: "/etc/prometheus"
+prometheus_server_logs_dir: "/etc/prometheus/logs"
+prometheus_server_config_dest: "/etc/prometheus/config.yml"
+prometheus_alertmanager_url: "http://{{ inventory_hostname }}:9093"
+prometheus_rules_dir: "/etc/prometheus/rules"
+prometheus_server_config_file:
+  scrape_configs:
+    - job_name: "node"
+      scrape_interval: "15s"
+      static_configs:
+        - targets: ["172.136.3.11:9100", "consul2.lan:9107"]
+    - job_name: "consul"
+      scrape_interval: "15s"
+      consul_sd_configs:
+        - server: "consul1.lan:8500"
+          services: ['prometheus']
+          datacenter: "lan1"
+          token: "KnqifJT6qkF0X+Zx9spnjg=="
+      relabel_configs:
+        - source_labels: ['__meta_consul_service']
+          regex:         '(.*)'
+          target_label:  'job'
+          replacement:   '$1'
+  rule_files:
+    - "/etc/prometheus/rules/downtime.rules"

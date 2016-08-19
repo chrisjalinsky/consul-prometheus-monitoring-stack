@@ -1,0 +1,11 @@
+{
+    "server": false,
+    "advertise_addr": "{{ consul_advertise_addr }}",
+    "client_addr": "{{ consul_client_addr }}",
+    "data_dir": "{{ consul_datadir }}",
+    "datacenter": "{{ consul_datacenter }}",
+    "enable_syslog": {{ consul_enable_syslog }},
+    "log_level": "{{ consul_log_level }}",
+    "encrypt": "{{ consul_encrypt }}",
+    "start_join" : {{ consul_server_list | to_json }}
+}

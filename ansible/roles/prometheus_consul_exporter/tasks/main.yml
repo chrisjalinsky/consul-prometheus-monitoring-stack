@@ -1,0 +1,52 @@
+---
+
+- name: Create Prometheus Consul Exporter release directory
+  file:
+    dest: "{{ item }}"
+    state: directory
+    recurse: yes
+  with_items:
+    - "/opt/prometheus_consul_exporter_{{ prometheus_consul_exporter_version }}"
+
+- name: Download Prometheus Consul Exporter release tarball
+  get_url:
+    url: "https://github.com/prometheus/consul_exporter/releases/download/{{ prometheus_consul_exporter_version }}/consul_exporter-{{ prometheus_consul_exporter_version }}.linux-amd64.tar.gz"
+    dest: "/opt/prometheus_consul_exporter_{{ prometheus_consul_exporter_version }}/consul_exporter-{{ prometheus_consul_exporter_version }}.linux-amd64.tar.gz"
+
+- name: Unarchive Prometheus Consul Exporter release tarball
+  unarchive:
+    src: "/opt/prometheus_consul_exporter_{{ prometheus_consul_exporter_version }}/consul_exporter-{{ prometheus_consul_exporter_version }}.linux-amd64.tar.gz"
+    dest: "/opt/prometheus_consul_exporter_{{ prometheus_consul_exporter_version }}/"
+    remote_src: yes
+    copy: no
+    creates: "/opt/prometheus_consul_exporter_{{ prometheus_consul_exporter_version }}/consul_exporter"
+
+- name: Ensure 775 permissions on Prometheus Consul Exporter binary
+  file:
+    dest: "/opt/prometheus_consul_exporter_{{ prometheus_consul_exporter_version }}/consul_exporter"
+    mode: "0775"
+
+- name: Symlink Prometheus Consul Exporter binary to exec dir
+  file:
+    src: "/opt/prometheus_consul_exporter_{{ prometheus_consul_exporter_version }}/consul_exporter"
+    dest: "/usr/local/bin/consul_exporter"
+    state: link
+
+#- name: Fail when expected and actual prometheus versions do not match
+#  shell: consul_exporter -version
+#  register: consul_exporter_version_output
+#  failed_when: '"{{ prometheus_consul_exporter_version }}" not in consul_exporter_version_output.stdout'
+
+- name: Include xenial when distro greater than 14.04
+  when: "{{ ansible_distribution_version > '14.04' }}"
+  include: xenial.yml
+
+- name: Include trusty when distro less than 16.04
+  when: "{{ ansible_distribution_version < '16.04' }}"
+  include: trusty.yml 
+
+- name: Ensure consul_exporter service started and enabled
+  service:
+    name: consul_exporter
+    enabled: yes
+    state: started

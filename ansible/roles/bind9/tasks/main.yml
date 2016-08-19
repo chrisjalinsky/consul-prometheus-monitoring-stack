@@ -1,0 +1,71 @@
+---
+
+- name: Ensure apt dependencies installed
+  apt:
+    name: "{{ item.name }}"
+    update_cache: "{{ item.update_cache | default('yes') }}"
+    cache_valid_time: "{{ item.cache_valid_time | default('3600') }}"
+  with_items:
+    - name: bind9
+    - name: bind9utils
+    - name: bind9-doc
+
+- name: Ensure /etc/default/bind9 has IPV4 option set
+  lineinfile:
+    dest: "/etc/default/bind9"
+    regexp: "^OPTIONS=.*"
+    line: 'OPTIONS="-4 -u bind"'
+
+- name: Ensure bind9 forward directories are present
+  shell: "mkdir -p {{ item.path }}"
+  with_items: "{{ bind9_named_forward_zones }}"
+
+- name: Ensure bind9 reverse directories are present
+  shell: "mkdir -p {{ item.path }}"
+  with_items: "{{ bind9_named_reverse_zones }}"
+
+- name: Ensure bind9 named conf templates in place
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    backup: yes
+  register: tmpl
+  with_items: "{{ bind9_named_conf_templates }}"
+
+- name: Ensure forward zone templates in place on master
+  when: bind9_type == "master"
+  template:
+    src: "etc/bind/zones/master/{{ item.file }}"
+    dest: "{{ item.path }}/{{ item.file }}"
+    backup: yes
+  register: fwd_zone_tmpl
+  with_items: "{{ bind9_named_forward_zones }}"
+
+- name: Ensure reverse zone templates in place on master
+  when: bind9_type == "master"
+  template:
+    src: "etc/bind/zones/master/{{ item.file }}"
+    dest: "{{ item.path }}/{{ item.file }}"
+    backup: yes
+  register: rev_zone_tmpl
+  with_items: "{{ bind9_named_reverse_zones }}"
+
+- name: Test named-checkzone forward records when master
+  when: bind9_type == "master"
+  shell: "named-checkzone {{ item.name }} {{ item.path }}/{{ item.file }}"
+  with_items: "{{ bind9_named_forward_zones }}"
+
+- name: Test named-checkzone reverse records when master
+  when: bind9_type == "master"
+  shell: "named-checkzone {{ item.name }} {{ item.path }}/{{ item.file }}"
+  with_items: "{{ bind9_named_reverse_zones }}"
+
+- name: Test named-checkconf
+  shell: "named-checkconf"
+  register: named_check_conf
+
+- name: Restart bind9 when checks pass
+  when: named_check_conf.rc == 0
+  service:
+    name: bind9
+    state: restarted

@@ -1,0 +1,41 @@
+nomad_user: "root"
+nomad_group: "root"
+
+nomad_version: "0.3.2"
+nomad_url: "https://releases.hashicorp.com/nomad/{{ nomad_version }}/nomad_{{ nomad_version }}_linux_amd64.zip"
+
+nomad_apt_deps:
+  - name: "unzip"
+
+nomad_type: "server"
+nomad_bin_path: "/usr/bin"
+nomad_executable: "{{ nomad_bin_path }}/nomad"
+
+nomad_init_path: "/etc/init"
+nomad_conf_path: "/etc/nomad"
+
+nomad_desired_state: "started"
+
+nomad_server_list: []
+nomad_server_templates:
+  - src: "nomad_server.json"
+    dest: "/etc/nomad/nomad_server.json"
+  - src: "nomad_server.conf"
+    dest: "/etc/init/nomad_server.conf"
+
+nomad_client_templates:
+  - src: "nomad_client.json"
+    dest: "/etc/nomad/nomad_client.json"
+  - src: "nomad_client.conf"
+    dest: "/etc/init/nomad_client.conf"
+
+nomad_network_iface: "eth0"
+nomad_advertise_addr: "0.0.0.0"
+nomad_bind_address: "0.0.0.0"
+nomad_client_bind_address: "0.0.0.0"
+nomad_client_addr: "0.0.0.0"
+nomad_datadir: "/var/lib/nomad"
+nomad_datacenter: "int1"
+nomad_enable_syslog: "true"
+nomad_log_level: "INFO"
+nomad_encrypt: "KnqifJT6qkF0X+Zx9spnjg=="

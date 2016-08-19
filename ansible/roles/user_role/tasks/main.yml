@@ -1,0 +1,72 @@
+---
+
+- name: Create Groups
+  group:
+    name: "{{ item.1 | default(omit) }}"
+  with_subelements:
+    - "{{ user_role_users }}"
+    - "groups"
+    - flags:
+      skip_missing: True
+
+- name: Create User
+  user:
+    name: "{{ item.0.name }}"
+    shell: "{{ item.0.shell | default('false') }}"
+    groups: "{{ item.1 | default('') }}"
+    append: "{{ item.0.append | default('yes') }}"
+    generate_ssh_key: "{{ item.0.generate_ssh_key | default('no') }}"
+    createhome: "{{ item.0.createhome | default('yes') }}"
+    state: "{{ item.0.state | default('present') }}"
+    remove: "{{ item.0.remove | default('no') }}"
+    ssh_key_bits: "{{ item.0.ssh_key_bits | default('2048') }}"
+    system: "{{ item.system | default('no') }}"
+  with_subelements:
+    - "{{ user_role_users }}"
+    - "groups"
+    - flags:
+      skip_missing: True
+
+- name: Set password to user
+  shell: "echo {{ item.name }}:{{ item.password }} | sudo chpasswd"
+  #no_log: True
+  register: passwd_set
+  with_items: "{{ user_role_users }}"
+  ignore_errors: yes
+
+- name: Add user to sudoers
+  shell: "echo '{{ item.name }} ALL = (root) NOPASSWD:ALL' | sudo tee /etc/sudoers.d/{{ item.name }}"
+  with_items: "{{ user_role_users }}"
+
+- name: Ensure 0440 Permissions on /etc/sudoers.d/ file
+  shell: "chmod 0440 /etc/sudoers.d/{{ item.name }}"
+  with_items: "{{ user_role_users }}"
+
+#- name: Create users groups
+#  user:
+#    name: "{{ item.name }}"
+#    groups: "{{ item.groups | join(',') | default('') }}"
+#    append: "{{ item.append | default('yes') }}"
+#  with_items: "{{ user_role_users }}"
+
+- name: Add Authorized key
+  authorized_key:
+    user: "{{ item.0.name }}"
+    key: "{{ lookup('file', item.1) }}"
+  with_subelements:
+    - "{{ user_role_users }}"
+    - "authorized"
+    - flags:
+      skip_missing: True
+
+- name: Copy private keys
+  copy:
+    src: "{{ item.1.src }}"
+    dest: "{{ item.1.dest }}"
+    mode: "0600"
+    owner: "{{ item.0.name }}"
+  with_subelements:
+    - "{{ user_role_users }}"
+    - "private_keys"
+    - flags:
+      skip_missing: True

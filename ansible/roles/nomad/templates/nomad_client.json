@@ -1,0 +1,13 @@
+{
+  "bind_addr": "{{ nomad_bind_address }}",
+  "data_dir": "{{ nomad_datadir }}",
+  "datacenter": "{{ nomad_datacenter }}",
+  "enable_syslog": {{ nomad_enable_syslog }},
+  "syslog_facility": "LOCAL0",
+  "log_level": "{{ nomad_log_level }}",
+  "client": {
+    "enabled": true,
+    "network_interface": "{{ nomad_network_iface }}",
+    "servers": {{ nomad_server_list | to_json }}
+  }
+}

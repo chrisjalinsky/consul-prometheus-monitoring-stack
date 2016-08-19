@@ -1,0 +1,8 @@
+---
+
+- name: Provision Prometheus consul exporter servers
+  hosts: prometheus_consul_exporter_servers
+  become: yes
+  become_user: root
+  roles:
+    - role: prometheus_consul_exporter

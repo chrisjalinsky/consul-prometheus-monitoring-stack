@@ -1,0 +1,8 @@
+description "Prometheus Consul Exporter process"
+
+start on (local-filesystems)
+stop on runlevel [!12345]
+
+respawn
+
+exec {{ prometheus_consul_exporter_bin_dir }}/consul_exporter -consul.server={{ prometheus_consul_exporter_consul_server }} -kv.prefix={{ prometheus_consul_exporter_kv_prefix }}

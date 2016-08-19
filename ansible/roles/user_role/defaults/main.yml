@@ -1,0 +1,16 @@
+---
+
+user_role_users:
+  - name: "user_role_user"
+    shell: "/bin/bash"
+    groups:
+      - "user_role_user_group"
+    append: "yes"
+    generate_ssh_key: "yes"
+    state: "present"
+    remove: "no"
+    ssh_key_bits: "2048"
+    authorized:
+      - "keys/consul.pub"
+    #password: ""
+    system: "no"

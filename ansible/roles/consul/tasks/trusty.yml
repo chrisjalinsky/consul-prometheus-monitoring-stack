@@ -1,0 +1,33 @@
+---
+
+- name: Template Consul server files when server
+  when: consul_type == 'server'
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode | default('0644') }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+  with_items:
+    - src: "consul_server.json"
+      dest: "/etc/consul/consul_server.json"
+    - src: "consul_server.conf"
+      dest: "/etc/init/consul_server.conf"
+  notify:
+    - restart consul_server
+
+- name: Template Consul client files when client
+  when: consul_type == 'client'
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode | default('0644') }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+  with_items:
+    - src: "consul_client.json"
+      dest: "/etc/consul/consul_client.json"
+    - src: "consul_client.conf"
+      dest: "/etc/init/consul_client.conf"
+  notify:
+    - restart consul_client

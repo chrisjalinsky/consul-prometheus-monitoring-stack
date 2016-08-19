@@ -1,0 +1,44 @@
+---
+
+bind9_type: "master"
+bind9_serial: "3"
+bind9_rev_serial: "3"
+bind9_listen: "0.0.0.0"
+
+bind9_named_allow_transfer: "none"
+bind9_statistics:
+  port: 8888
+  address: "0.0.0.0"
+
+bind9_named_conf_templates:
+  - src: "etc/bind/named.conf.options"
+    dest: "/etc/bind/named.conf.options"
+  - src: "etc/bind/named.conf.local"
+    dest: "/etc/bind/named.conf.local"
+
+bind9_named_forward_zones: []
+#bind9_named_forward_zones:
+#  - name: "lan"
+#    path: "/etc/bind/zones/master"
+#    file: "db.lan"
+#    transfer_hosts: []
+
+bind9_named_reverse_zones: []    
+#bind9_named_reverse_zones:
+#  - name: "136.17.in-addr.arpa"
+#    path: "/etc/bind/zones/master"
+#    file: "db.136.17.in-addr.arpa"
+#    transfer_hosts: []
+
+bind9_named_forwarder_zones: []
+#bind9_named_forwarder_zones:
+#  - name: "consul"
+#    hosts: []
+
+bind9_named_acls: []
+
+bind9_named_forwarders:
+  - "8.8.8.8"
+  - "8.8.4.4"
+    
+    

@@ -1,0 +1,11 @@
+[Unit]
+Description=Node Exporter
+Documentation=https://github.com/prometheus/node_exporter
+
+[Service]
+ExecStart={{ prometheus_node_exporter_bin_dir }}/node_exporter
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

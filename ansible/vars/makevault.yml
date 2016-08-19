@@ -1,0 +1,24 @@
+---
+
+# This should be converted to a vault
+authorized_registry_users:
+  - user: tester
+    password: pw
+  - user: testuser
+    password: pass
+
+_users:
+  - name: "consul"
+    shell: "/bin/bash"
+    groups:
+      - "consul"
+    append: "yes"
+    generate_ssh_key: "no"
+    ssh_key_bits: "4096"
+    authorized:
+      - "vars/keys/id_rsa.pub"
+    private_keys:
+      - src: "vars/keys/id_rsa"
+        dest: "/home/consul/.ssh/id_rsa"
+    password: 12345
+    system: "no"

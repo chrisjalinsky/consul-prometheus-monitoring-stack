@@ -1,0 +1,25 @@
+---
+
+prometheus_alertmanager_version: "0.3.0"
+prometheus_alertmanager_bin_dir: "/usr/local/bin"
+prometheus_alertmanager_config_dir: "/etc/prometheus_alertmanager"
+prometheus_alertmanager_config_file: "{{ prometheus_alertmanager_config_dir }}/config.yml"
+prometheus_alertmanager_config_hash:
+  global:
+    smtp_smarthost: '{{ inventory_hostname }}:587'
+    smtp_from: 'alertmanager@{{ inventory_hostname }}'
+  route:
+    receiver: 'team-X-mails'
+    group_by: ['alertname', 'cluster']
+    group_wait: 30s
+    group_interval: 5m
+    repeat_interval: 3h
+    routes:
+      - match_re:
+          service: ^(prometheus|foo2|baz)$
+        receiver: team-X-mails
+  receivers:
+    - name: 'team-X-mails'
+      email_configs:
+        - to: 'team-X+cjalinsky@altitudedigital.com'
+          require_tls: false

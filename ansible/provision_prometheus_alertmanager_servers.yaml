@@ -1,0 +1,10 @@
+---
+
+- name: Provision Prometheus Alert Manager servers
+  hosts: prometheus_alertmanager_servers
+  become: yes
+  become_user: root
+  roles:
+    - role: openssl
+      openssl_generator_complexity: 4096
+    - role: prometheus_alertmanager

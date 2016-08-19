@@ -1,0 +1,8 @@
+description "Prometheus Alert Manager process"
+
+start on (local-filesystems)
+stop on runlevel [!12345]
+
+respawn
+
+exec {{ prometheus_server_bin_dir }}/prometheus -config.file={{ prometheus_server_config_dest }}{% if prometheus_alertmanager_url is defined and prometheus_alertmanager_url != "" %} -alertmanager.url={{ prometheus_alertmanager_url }}{% endif%}

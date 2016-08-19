@@ -1,0 +1,8 @@
+description "Prometheus Alert Manager process"
+
+start on (local-filesystems)
+stop on runlevel [!12345]
+
+respawn
+
+exec {{ prometheus_alertmanager_bin_dir }}/alertmanager -config.file={{ prometheus_alertmanager_config_file }}

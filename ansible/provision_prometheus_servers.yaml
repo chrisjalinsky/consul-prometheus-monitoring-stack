@@ -1,0 +1,9 @@
+---
+
+- name: Provision Prometheus servers
+  hosts: prometheus_servers
+  become: yes
+  become_user: root
+  roles:
+    - role: prometheus_server
+    - role: grafana

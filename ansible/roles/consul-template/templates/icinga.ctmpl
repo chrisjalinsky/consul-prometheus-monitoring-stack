@@ -1,0 +1,20 @@
+### Host Definitions ###
+{{range nodes}}
+define host {
+  use         linux-host
+  hostname    {{.Node}}
+  alias       {{.Node}}
+  address     {{.Address}}
+}
+{{end}}
+###End host Definitions ###
+
+### Service Definitions ###
+{{range services}}{{range service .Name}}
+define service {
+  service_description     {{.Node}}_{{.Name}}_{{.Port}}
+  host_name               {{.Node}}
+  check_command           check_tcp!"-p {{.Port}}"
+}
+{{end}}{{end}}
+### End Service Definitions ###

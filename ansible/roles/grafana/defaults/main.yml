@@ -1,0 +1,30 @@
+---
+
+grafana_version: 3.1.1-1470047149
+grafana_deb_name: grafana
+grafana_unarchive_prefix: /tmp
+grafana_conf_dir: /etc/grafana
+grafana_service: grafana-server
+
+grafana_ini_vars:
+  - name: "paths"
+  - name: "server"
+  - name: "database"
+  - name: "session"
+  - name: "analytics"
+  - name: "security"
+  - name: "users"
+  - name: "auth.anonymous"
+  - name: "auth.github"
+  - name: "auth.google"
+  - name: "auth.proxy"
+  - name: "auth.basic"
+  - name: "auth.ldap"
+  - name: "smtp"
+  - name: "emails"
+  - name: "log"
+  - name: "log.file"
+  - name: "dashboards.json"
+    vars:
+      - enabled: "false"
+      - path: "/var/lib/grafana/dashboards"

@@ -1,0 +1,55 @@
+---
+
+- name: Ensure Nomad conf paths exist
+  file:
+    dest: "{{ item.dest }}"
+    state: "{{ item.state | default('directory') }}"
+    recurse: "{{ item.recurse | default('yes') }}"
+  with_items:
+    - dest: "{{ nomad_conf_path }}"
+    - dest: "{{ nomad_datadir }}"
+
+- name: Ensure Nomad apt dependencies are met
+  apt:
+    name: "{{ item.name }}"
+    update_cache: "{{ item.update_cache | default('yes') }}"
+    cache_valid_time: "{{ item.cache_valid_time | default('3600') }}"
+  with_items: "{{ nomad_apt_deps }}"
+
+- name: Download Nomad and unzip to {{ nomad_executable }}
+  unarchive:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    copy: "no"
+    mode: "0775"
+    creates: "{{ item.creates }}"
+  with_items:
+    - src: "{{ nomad_url }}"
+      dest: "{{ nomad_bin_path }}"
+      creates: "{{ nomad_executable }}"
+
+- name: Template Nomad server files when server
+  when: nomad_type == 'server'
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode | default('0644') }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+  with_items: "{{ nomad_server_templates }}"
+
+- name: Template Nomad client files when client
+  when: nomad_type == 'client'
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: "{{ item.mode | default('0644') }}"
+    owner: "{{ item.owner | default('root') }}"
+    group: "{{ item.group | default('root') }}"
+  with_items: "{{ nomad_client_templates }}"
+
+- name: Ensure Nomad in desired state
+  service:
+    name: "nomad_{{ nomad_type }}"
+    state: "{{ nomad_desired_state }}"
+    pattern: "{{ nomad_init_path }}/nomad_{{ nomad_type }}"

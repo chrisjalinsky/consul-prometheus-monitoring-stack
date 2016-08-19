@@ -1,0 +1,49 @@
+consul_user: "root"
+consul_group: "root"
+
+consul_version: "0.6.4"
+consul_url: "https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_linux_amd64.zip"
+consul_ui_url: "https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_web_ui.zip"
+consul_apt_deps:
+  - name: "unzip"
+
+consul_type: "server"
+consul_bin_path: "/usr/bin"
+consul_executable: "{{ consul_bin_path }}/consul"
+
+consul_init_path: "/etc/init"
+consul_conf_path: "/etc/consul"
+consul_ui_path: "/opt/consul-ui"
+
+consul_desired_state: "started"
+
+consul_server_list: []
+
+consul_advertise_iface: "eth0"
+consul_advertise_addr: "0.0.0.0"
+consul_http_addr: "0.0.0.0"
+consul_https_addr: "0.0.0.0"
+consul_dns_addr: "0.0.0.0"
+consul_client_addr: "0.0.0.0"
+consul_datadir: "/var/lib/consul"
+consul_datacenter: "lan1"
+consul_enable_syslog: "true"
+consul_log_level: "DEBUG"
+consul_encrypt: "KnqifJT6qkF0X+Zx9spnjg=="
+
+consul_server_list_lookup_interface: "eth0"
+
+consul_services_hash:
+  services: []
+#    - name: prometheus
+#      tags:
+#      - prometheus
+#      - node-exporter
+#      address: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}"
+#      port: 9100
+#      checks:
+#      - id: ssh_check
+#        name: Prometheus node-exporter TCP on port 9100
+#        tcp: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:9100"
+#        interval: 10s
+#        timeout: 1s

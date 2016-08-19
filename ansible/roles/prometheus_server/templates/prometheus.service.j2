@@ -1,0 +1,13 @@
+[Unit]
+Description=Prometheus Server
+Documentation=https://prometheus.io/docs/
+
+[Service]
+ExecStart={{ prometheus_server_bin_dir }}/prometheus \
+  -config.file={{ prometheus_server_config_dest }} \
+  -alertmanager.url={{ prometheus_alertmanager_url }}
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

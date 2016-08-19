@@ -1,0 +1,17 @@
+{
+  "bind_addr": "{{ nomad_bind_address }}",
+  "advertise": {
+    "rpc": "{{ nomad_bind_address }}:4647",
+    "serf": "{{ nomad_bind_address }}:4648"
+  },
+  "data_dir": "{{ nomad_datadir }}",
+  "datacenter": "{{ nomad_datacenter }}",
+  "enable_syslog": {{ nomad_enable_syslog }},
+  "syslog_facility": "LOCAL0",
+  "log_level": "{{ nomad_log_level }}",
+  "server": {
+    "bootstrap_expect": {{ nomad_server_list | length }},
+    "enabled": true,
+    "start_join": {{ nomad_server_list | to_json }}
+  }
+}

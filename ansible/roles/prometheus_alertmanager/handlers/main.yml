@@ -1,0 +1,9 @@
+---
+
+- name: reload systemd-daemon
+  shell: systemctl daemon-reload
+
+- name: restart alertmanager
+  service:
+    name: alertmanager
+    state: restarted

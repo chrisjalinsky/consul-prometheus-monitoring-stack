@@ -1,0 +1,19 @@
+#jinja2: trim_blocks: True, lstrip_blocks: True
+# {{ ansible_managed }}
+{% if grafana_ini_vars is defined and grafana_ini_vars|length > 0 %}
+{% for block in grafana_ini_vars %}
+{% if block['name'] is defined %}
+[{{block['name']}}]
+{% endif %}
+{% for k,v in block.items() %}
+{% if k == 'vars' %}
+{% for confitem in v %}
+{% for key,val in confitem.items() %}
+{{key}} = {{val}}
+{% endfor %}
+{% endfor %}
+
+{% endif %}
+{% endfor %}
+{% endfor %}
+{% endif %}

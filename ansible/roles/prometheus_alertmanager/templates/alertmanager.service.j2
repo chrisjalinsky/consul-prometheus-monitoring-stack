@@ -1,0 +1,12 @@
+[Unit]
+Description=Alert Manager
+Documentation=https://github.com/prometheus/alertmanager
+
+[Service]
+ExecStart={{ prometheus_alertmanager_bin_dir }}/alertmanager \
+   -config.file={{ prometheus_alertmanager_config_file }}
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

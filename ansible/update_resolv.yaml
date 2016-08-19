@@ -1,0 +1,17 @@
+---
+
+- name: Update resolv.conf
+  hosts: all
+  become: yes
+  become_user: root
+  tasks:
+    - name: Replace nameserver line
+      lineinfile:
+        dest: "/etc/resolv.conf"
+        regexp: "^nameserver.*"
+        line: "nameserver 172.136.1.11"
+    - name: Replace search line
+      lineinfile:
+        dest: "/etc/resolv.conf"
+        regexp: "^search.*"
+        line: "search lan"

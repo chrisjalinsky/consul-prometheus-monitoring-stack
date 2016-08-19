@@ -1,0 +1,26 @@
+---
+
+openssl_apt_package_name: "openssl"
+openssl_base_dir: "/etc/ssl"
+openssl_cert_ca_base_dir: "{{ openssl_base_dir }}/certs"
+openssl_cert_private_base: "{{ openssl_base_dir }}/private"
+
+#openssl_generator_cert_name: "mycert"
+#openssl_generator_cert_domain: "*.dev.lan"
+openssl_generator_complexity: "2048"
+openssl_generator_cert_name: "{{ inventory_hostname }}"
+openssl_generator_cert_domain: "{{ inventory_hostname }}"
+openssl_generator_passphrase: ""
+openssl_generator_country: "US"
+openssl_generator_state: "Colorado"
+openssl_generator_locality: "Denver"
+openssl_generator_org: ""
+openssl_generator_org_unit: ""
+openssl_generator_email_address: ""
+
+openssl_generator_script_dir: "/usr/bin"
+openssl_generator_script_name: "ssl_cert_generator"
+
+openssl_create_pem: "yes"
+openssl_cert_dir: "{{ openssl_base_dir }}/{{ openssl_generator_cert_name }}"
+openssl_pem_name: "{{ openssl_pem_dir }}/{{ openssl_generator_cert_name }}"

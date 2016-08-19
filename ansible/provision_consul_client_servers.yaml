@@ -1,0 +1,61 @@
+- name: Install clients with Consul
+  hosts: consul_client_servers
+  become: yes
+  become_user: root
+  gather_facts: yes
+  vars_files:
+    - vars/makevault.yml
+  roles:
+    - role: consul
+      consul_type: "client"
+      consul_version: "0.6.4"
+      consul_log_level: "DEBUG"
+      consul_advertise_iface: 'eth1'
+      consul_advertise_addr: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}"
+      consul_client_addr: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}"
+      consul_server_list: ["172.136.2.11", "172.136.2.12", "172.136.2.13"]
+      consul_services_hash:
+        services:
+          - name: prometheus
+            tags:
+            - prometheus
+            - node-exporter
+            address: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}"
+            port: 9100
+            checks:
+            - id: prometheus_check_2
+              name: Prometheus node-exporter TCP on port 9100
+              tcp: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:9100"
+              interval: 10s
+              timeout: 1s
+
+- name: Install clients with Consul
+  hosts: core_servers
+  become: yes
+  become_user: root
+  gather_facts: yes
+  vars_files:
+    - vars/makevault.yml
+  roles:
+    - role: consul
+      consul_type: "client"
+      consul_version: "0.6.4"
+      consul_log_level: "DEBUG"
+      consul_advertise_iface: 'eth1'
+      consul_advertise_addr: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}"
+      consul_client_addr: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}"
+      consul_server_list: ["172.136.2.11", "172.136.2.12", "172.136.2.13"]
+      consul_services_hash:
+        services:
+          - name: prometheus
+            tags:
+            - prometheus
+            - node-exporter
+            address: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}"
+            port: 9100
+            checks:
+            - id: prometheus_check_1
+              name: Prometheus node-exporter TCP on port 9100
+              tcp: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:9100"
+              interval: 10s
+              timeout: 1s

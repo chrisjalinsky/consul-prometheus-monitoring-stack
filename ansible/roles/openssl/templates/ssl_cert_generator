@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+# Specify where we will install
+# the certificate
+SSL_DIR="{{ openssl_base_dir }}/{{ openssl_generator_cert_name }}"
+
+# Set the wildcarded domain
+# we want to use
+DOMAIN="{{ openssl_generator_cert_domain }}"
+
+# A blank passphrase
+PASSPHRASE="{{ openssl_generator_passphrase }}"
+
+# Set our CSR variables
+SUBJ="
+C={{ openssl_generator_country }}
+ST={{ openssl_generator_state }}
+O={{ openssl_generator_org }}
+localityName={{ openssl_generator_locality }}
+commonName=$DOMAIN
+organizationalUnitName={{ openssl_generator_org_unit }}
+emailAddress={{ openssl_generator_email_address }}
+"
+
+# Create our SSL directory
+# in case it doesn't exist
+sudo mkdir -p "$SSL_DIR"
+
+# Generate our Private Key, CSR and Certificate
+sudo openssl genrsa -out "$SSL_DIR/{{ openssl_generator_cert_name }}.key" {{ openssl_generator_complexity }}
+sudo openssl req -new -subj "$(echo -n "$SUBJ" | tr "\n" "/")" -key "$SSL_DIR/{{ openssl_generator_cert_name }}.key" -out "$SSL_DIR/{{ openssl_generator_cert_name }}.csr" -passin pass:$PASSPHRASE
+sudo openssl x509 -req -days 365 -in "$SSL_DIR/{{ openssl_generator_cert_name }}.csr" -signkey "$SSL_DIR/{{ openssl_generator_cert_name }}.key" -out "$SSL_DIR/{{ openssl_generator_cert_name }}.crt"

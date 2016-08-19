@@ -1,0 +1,17 @@
+{
+    "server": true,
+    "bootstrap_expect": {{ consul_server_list|length }},
+    "advertise_addr": "{{ consul_advertise_addr }}",
+    "datacenter": "{{ consul_datacenter }}",
+    "data_dir": "{{ consul_datadir }}",
+    "addresses": {
+        "http": "{{ consul_http_addr }}",
+        "https": "{{ consul_https_addr }}",
+        "dns": "{{ consul_dns_addr }}"
+    },
+    "enable_syslog": {{ consul_enable_syslog }},
+    "log_level": "{{ consul_log_level }}",
+    "ui_dir": "{{ consul_ui_path }}",
+    "encrypt": "{{ consul_encrypt }}",
+    "retry_join" : {{ hostvars | server_group_filter_v2(consul_server_list, inventory_hostname, consul_server_list_lookup_interface) | to_json }}
+}

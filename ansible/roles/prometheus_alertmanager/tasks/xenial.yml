@@ -1,0 +1,16 @@
+---
+
+- name: Create Alert Manager systemd directory
+  file:
+    dest: "/etc/systemd/system"
+    state: directory
+    recurse: yes
+
+- name: Template Alert Manager systemd service file
+  register: systemd_service_template
+  template:
+    src: "alertmanager.service.j2"
+    dest: "/etc/systemd/system/alertmanager.service"
+  notify:
+    - reload systemd-daemon
+    - restart alertmanager

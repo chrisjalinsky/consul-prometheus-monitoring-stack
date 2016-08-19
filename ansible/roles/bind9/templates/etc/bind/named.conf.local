@@ -1,0 +1,33 @@
+{% if bind9_named_forward_zones is defined and bind9_named_forward_zones|length > 0 %}
+{% for zone in bind9_named_forward_zones %}
+zone "{{ zone.name }}" {
+{% if bind9_type is defined %}
+    type {{ bind9_type }};
+    file "{{ zone.path }}/{{ zone.file }}";
+    {% if bind9_type == 'master' %}allow-transfer{% else %}masters{% endif %} { {{ zone.hosts | join("; ") }}; };
+{% endif %}
+};
+{% endfor %}
+{% endif %}
+
+{% if bind9_named_reverse_zones is defined and bind9_named_reverse_zones|length > 0 %}
+{% for zone in bind9_named_reverse_zones %}
+zone "{{ zone.name }}" {
+{% if bind9_type is defined %}
+    type {{ bind9_type }};
+    file "{{ zone.path }}/{{ zone.file }}";
+    {% if bind9_type == 'master' %}allow-transfer{% else %}masters{% endif %} { {{ zone.hosts | join("; ") }}; };
+{% endif %}
+};
+{% endfor %}
+{% endif %}
+
+{% if bind9_named_forwarder_zones is defined and bind9_named_forwarder_zones|length > 0 %}
+{% for zone in bind9_named_forwarder_zones %}
+zone "{{ zone.name }}" {
+    type forward;
+    forward only;
+    forwarders { {{ zone.hosts | join("; ") }}; };
+};
+{% endfor %}
+{% endif %}

@@ -1,0 +1,70 @@
+{% if bind9_named_acls is defined and bind9_named_acls | length > 0 %}
+{% for acl in bind9_named_acls %}
+acl "{{ acl.name }}" {
+{% if acl.allowed is defined and acl.allowed|length > 0 %}
+{% for allow in acl.allowed %}
+  {{ allow }};
+{% endfor %}
+{% endif %}
+};
+{% endfor %}
+{% endif %}
+
+{% if bind9_statistics is defined and bind9_statistics.address is defined and bind9_statistics.port is defined %}
+statistics-channels {
+  inet {{ bind9_statistics.address }} port {{ bind9_statistics.port }} allow { any; };
+  inet ::1 port {{ bind9_statistics.port }} allow { any; };
+};
+{% endif %}
+
+options {
+	directory "/var/cache/bind";
+
+	// If there is a firewall between you and nameservers you want
+	// to talk to, you may need to fix the firewall to allow multiple
+	// ports to talk.  See http://www.kb.cert.org/vuls/id/800113
+
+	// If your ISP provided one or more IP addresses for stable 
+	// nameservers, you probably want to use them as forwarders.  
+	// Uncomment the following block, and insert the addresses replacing 
+	// the all-0's placeholder.
+
+	// forwarders {
+	// 	0.0.0.0;
+	// };
+	
+  recursion yes;
+{% if bind9_named_acls is defined and bind9_named_acls|length > 0 %}
+  allow-recursion { {% for acl in bind9_named_acls %}{{ acl.name }}; {% endfor %} };
+{% else %}
+  allow-recursion { any; };
+{% endif %}
+  listen-on { {{ bind9_listen }}; };   # private IP
+  allow-transfer { {{ bind9_named_allow_transfer }}; };      # disable zone transfers by default
+
+{% if bind9_named_forwarders is defined and bind9_named_forwarders|length > 0 %}
+  forwarders {
+{% for fwd in bind9_named_forwarders %}
+    {{ fwd }};
+{% endfor %}
+  };
+{% endif %}
+
+	//========================================================================
+	// If BIND logs error messages about the root key being expired,
+	// you will need to update your keys.  See https://www.isc.org/bind-keys
+	//========================================================================
+	//dnssec-validation auto;
+
+	//auth-nxdomain no;    # conform to RFC1035
+	//listen-on-v6 { any; };
+	
+	// override for consul
+	dnssec-validation no;
+	dnssec-enable no;
+
+  //turn off ipv6 and authoritative answer
+	auth-nxdomain no;    # conform to RFC1035
+	listen-on-v6 { none; };
+	
+};

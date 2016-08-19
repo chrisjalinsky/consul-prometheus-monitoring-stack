@@ -1,0 +1,49 @@
+---
+
+- name: Install openssl
+  apt:
+    name: "{{ openssl_apt_package_name }}"
+    state: present
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Ensure certificate directories are present
+  file:
+    dest: "{{ item.dest }}"
+    state: "{{ item.state|default('directory' )}}"
+    recurse: "{{ item.recurse|default('yes') }}"
+    owner: "{{ item.owner|default('root') }}"
+    group: "{{ item.group|default('root') }}"
+  with_items:
+    - dest: "{{ openssl_base_dir }}"
+    - dest: "{{ openssl_cert_dir }}"
+    - dest: "{{ openssl_cert_ca_base_dir }}"
+    - dest: "{{ openssl_cert_private_base }}"
+
+- name: Ensure pem dir is present if specified
+  file:
+    dest: "{{ item.dest }}"
+    state: "{{ item.state|default('directory' )}}"
+    recurse: "{{ item.recurse|default('yes') }}"
+    owner: "{{ item.owner|default('root') }}"
+    group: "{{ item.group|default('root') }}"
+  with_items:
+    - dest: "{{ openssl_cert_dir }}"
+  when: openssl_create_pem is defined and openssl_create_pem == 'yes'
+
+- name: Ensure ssl cert generator is created
+  template:
+    src: "{{ openssl_generator_script_name }}"
+    dest: "{{ openssl_generator_script_dir }}/{{ openssl_generator_script_name }}"
+    mode: 0755
+
+- name: Ensure ssl cert created
+  shell: "{{ openssl_generator_script_dir }}/{{ openssl_generator_script_name }}"
+  args:
+    creates: "{{ openssl_cert_dir }}/{{openssl_generator_cert_name }}.crt"
+
+- name: Ensure pem created if specified
+  shell: "cat {{ openssl_cert_dir }}/{{openssl_generator_cert_name }}.crt {{ openssl_cert_dir }}/{{openssl_generator_cert_name }}.key | tee {{ openssl_cert_dir }}/{{openssl_generator_cert_name }}.pem"
+  args:
+    creates: "{{ openssl_cert_dir }}/{{openssl_generator_cert_name }}.pem"
+  when: openssl_create_pem is defined and openssl_create_pem == 'yes'

@@ -1,0 +1,11 @@
+[Unit]
+Description=Consul Exporter
+Documentation=https://github.com/prometheus/consul_exporter
+
+[Service]
+ExecStart={{ prometheus_consul_exporter_bin_dir }}/consul_exporter
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

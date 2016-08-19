@@ -1,0 +1,15 @@
+---
+
+- name: Create Consul Exporter upstart directory
+  file:
+    dest: "/etc/init"
+    state: directory
+    recurse: yes
+
+- name: Template Consul Exporter upstart service file
+  register: upstart_service_template
+  template:
+    src: "consul_exporter.conf.j2"
+    dest: "/etc/init/consul_exporter.conf"
+  notify:
+    - restart consul_exporter

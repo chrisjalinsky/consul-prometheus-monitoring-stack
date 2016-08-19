@@ -1,0 +1,69 @@
+---
+
+- name: Create Prometheus release directory
+  file:
+    dest: "{{ item }}"
+    state: directory
+    recurse: yes
+  with_items:
+    - "/opt/prometheus_v{{ prometheus_server_version }}"
+    - "{{ prometheus_server_config_dir }}"
+    - "{{ prometheus_server_logs_dir }}"
+    - "{{ prometheus_rules_dir }}"
+
+- name: Download Prometheus v{{ prometheus_server_version }} release tarball
+  get_url:
+    url: "https://github.com/prometheus/prometheus/releases/download/v{{ prometheus_server_version }}/prometheus-{{ prometheus_server_version }}.linux-amd64.tar.gz"
+    dest: "/opt/prometheus_v{{ prometheus_server_version }}/prometheus-{{ prometheus_server_version }}.linux-amd64.tar.gz"
+
+- name: Unarchive Prometheus v{{ prometheus_server_version }} tarball
+  unarchive:
+    src: "/opt/prometheus_v{{ prometheus_server_version }}/prometheus-{{ prometheus_server_version }}.linux-amd64.tar.gz"
+    dest: "/opt/prometheus_v{{ prometheus_server_version }}/"
+    remote_src: yes
+    copy: no
+    creates: "/opt/prometheus_v{{ prometheus_server_version }}/prometheus-{{ prometheus_server_version }}.linux-amd64/prometheus"
+
+- name: Ensure 775 permissions on prometheus binary
+  file:
+    dest: "/opt/prometheus_v{{ prometheus_server_version }}/prometheus-{{ prometheus_server_version }}.linux-amd64/prometheus"
+    mode: "0775"
+
+- name: Symlink Prometheus binary to exec dir
+  file:
+    src: "/opt/prometheus_v{{ prometheus_server_version }}/prometheus-{{ prometheus_server_version }}.linux-amd64/prometheus"
+    dest: "/usr/local/bin/prometheus"
+    state: link
+
+- name: Fail when expected and actual prometheus versions do not match
+  shell: prometheus -version
+  register: prometheus_version_output
+  failed_when: '"{{ prometheus_server_version }}" not in prometheus_version_output.stdout'
+
+- name: Create rules files when specified in prometheus_server_config_file
+  when: prometheus_server_config_file is defined and prometheus_server_config_file['rule_files'] is defined and prometheus_server_config_file['rule_files']|length > 0
+  template:
+    src: "../templates/{{ item }}"
+    dest: "{{ item }}"
+  with_items: "{{ prometheus_server_config_file['rule_files'] }}"
+
+- name: Template config file
+  copy:
+    content: "{{ prometheus_server_config_file|to_nice_yaml }}"
+    dest: "{{ prometheus_server_config_dest }}"
+  notify:
+    - restart prometheus
+
+- name: Include xenial when distro greater than 14.04
+  when: "{{ ansible_distribution_version > '14.04' }}"
+  include: xenial.yml
+
+- name: Include trusty when distro less than 16.04
+  when: "{{ ansible_distribution_version < '16.04' }}"
+  include: trusty.yml
+
+- name: Ensure prometheus service started and enabled
+  service:
+    name: prometheus
+    enabled: yes
+    state: started

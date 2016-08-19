@@ -1,0 +1,15 @@
+---
+
+- name: Create Node Exporter upstart directory
+  file:
+    dest: "/etc/init"
+    state: directory
+    recurse: yes
+
+- name: Template Node Exporter upstart service file
+  register: upstart_service_template
+  template:
+    src: "node_exporter.conf.j2"
+    dest: "/etc/init/node_exporter.conf"
+  notify:
+    - restart node_exporter

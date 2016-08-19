@@ -1,0 +1,8 @@
+description "Prometheus Node Exporter process"
+
+start on (local-filesystems)
+stop on runlevel [!12345]
+
+respawn
+
+exec {{ prometheus_node_exporter_bin_dir }}/node_exporter
