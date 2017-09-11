@@ -3,7 +3,13 @@
 - name: reload systemd-daemon
   shell: systemctl daemon-reload
 
-- name: restart alertmanager
+- name: restart_alertmanager_14.04
   service:
     name: alertmanager
     state: restarted
+
+- name: restart_alertmanager_16.04
+  systemd:
+    name: alertmanager
+    state: restarted
+    daemon_reload: yes

@@ -12,7 +12,7 @@
     src: "consul_exporter.conf.j2"
     dest: "/etc/init/consul_exporter.conf"
   notify:
-    - restart consul_exporter
+    - "restart_consul_exporter_{{ ansible_distribution_version }}"
 
 - name: Ensure consul_exporter service started and enabled
   service:

@@ -12,7 +12,7 @@
     src: "prometheus.conf.j2"
     dest: "/etc/init/prometheus.conf"
   notify:
-    - restart prometheus
+    - "restart_prometheus_{{ ansible_distribution_version }}"
 
 - name: Ensure prometheus service started and enabled
   service:

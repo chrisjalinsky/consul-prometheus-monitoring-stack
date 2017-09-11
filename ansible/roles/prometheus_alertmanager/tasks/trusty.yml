@@ -12,7 +12,7 @@
     src: "alertmanager.conf.j2"
     dest: "/etc/init/alertmanager.conf"
   notify:
-    - restart alertmanager
+    - "restart_alertmanager_{{ ansible_distribution_version }}"
 
 - name: Ensure alertmanager service started and enabled
   service:

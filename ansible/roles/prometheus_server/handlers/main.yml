@@ -1,9 +1,12 @@
 ---
 
-- name: reload systemd-daemon
-  shell: systemctl daemon-reload
-
-- name: restart prometheus
+- name: restart_prometheus_14.04
   service:
     name: prometheus
     state: restarted
+
+- name: restart_prometheus_16.04
+  systemd:
+    name: prometheus
+    state: restarted
+    daemon_reload: yes

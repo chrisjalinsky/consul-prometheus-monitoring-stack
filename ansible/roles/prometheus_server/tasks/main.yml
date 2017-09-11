@@ -52,7 +52,7 @@
     content: "{{ prometheus_server_config_file|to_nice_yaml }}"
     dest: "{{ prometheus_server_config_dest }}"
   notify:
-    - restart prometheus
+    - "restart_prometheus_{{ ansible_distribution_version }}"
 
 - name: Include xenial when distro greater than 14.04
   when: ansible_distribution_version|version_compare('14.04','>')

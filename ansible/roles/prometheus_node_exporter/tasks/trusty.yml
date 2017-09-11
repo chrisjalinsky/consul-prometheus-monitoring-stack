@@ -12,7 +12,7 @@
     src: "node_exporter.conf.j2"
     dest: "/etc/init/node_exporter.conf"
   notify:
-    - restart node_exporter
+    - "restart_node_exporter_{{ ansible_distribution_version }}"
 
 - name: Ensure node_exporter service started and enabled
   service:

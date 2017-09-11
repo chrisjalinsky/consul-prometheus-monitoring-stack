@@ -12,8 +12,7 @@
     src: "prometheus.service.j2"
     dest: "/etc/systemd/system/prometheus.service"
   notify:
-    - reload systemd-daemon
-    - restart prometheus
+    - "restart_prometheus_{{ ansible_distribution_version }}"
 
 - name: Ensure prometheus service started and enabled
   systemd:

@@ -14,7 +14,7 @@
     - src: "consul_server.conf"
       dest: "/etc/init/consul_server.conf"
   notify:
-    - restart consul_server
+    - "restart_consul_server_{{ ansible_distribution_version }}"
 
 - name: Template Consul client files when client
   when: consul_type == 'client'
@@ -30,4 +30,10 @@
     - src: "consul_client.conf"
       dest: "/etc/init/consul_client.conf"
   notify:
-    - restart consul_client
+    - "restart_consul_client_{{ ansible_distribution_version }}"
+
+- name: Ensure Consul in desired state and enabled
+  service:
+    name: "consul_{{ consul_type }}"
+    state: "{{ consul_desired_state }}"
+    enabled: yes

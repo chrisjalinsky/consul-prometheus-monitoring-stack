@@ -1,11 +1,21 @@
 ---
 
-- name: restart consul_server
+- name: restart_consul_server_14.04
   service:
     name: consul_server
     state: restarted
 
-- name: restart consul_client
+- name: restart_consul_server_16.04
+  systemd:
+    name: consul_server
+    state: restarted
+
+- name: restart_consul_client_14.04
   service:
+    name: consul_client
+    state: restarted
+
+- name: restart_consul_client_16.04
+  systemd:
     name: consul_client
     state: restarted

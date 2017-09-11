@@ -9,12 +9,12 @@
     owner: "{{ item.owner | default('root') }}"
     group: "{{ item.group | default('root') }}"
   with_items:
-    - src: consul_server.service.j2
-      dest: /etc/systemd/system/consul_server.service
+    - src: "consul_server.service.j2"
+      dest: "/etc/systemd/system/consul_server.service"
     - src: "consul_server.json"
       dest: "/etc/consul/consul_server.json"
   notify:
-    - restart consul_server
+    - "restart_consul_server_{{ ansible_distribution_version }}"
 
 - name: Template Consul client files when client
   when: consul_type == 'client'
@@ -25,9 +25,14 @@
     owner: "{{ item.owner | default('root') }}"
     group: "{{ item.group | default('root') }}"
   with_items:
-    - src: consul_client.service.j2
-      dest: /etc/systemd/system/consul_client.service
+    - src: "consul_client.service.j2"
+      dest: "/etc/systemd/system/consul_client.service"
     - src: "consul_client.json"
       dest: "/etc/consul/consul_client.json"
   notify:
-    - restart consul_client
+    - "restart_consul_server_{{ ansible_distribution_version }}"
+
+- name: Ensure Consul in desired state
+  systemd:
+    name: "consul_{{ consul_type }}"
+    state: "{{ consul_desired_state }}"

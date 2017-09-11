@@ -2,3 +2,4 @@
 .vagrant/
 ansible/*.retry
 ansible/install.out
+*.pyc

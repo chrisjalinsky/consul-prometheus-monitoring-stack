@@ -12,8 +12,7 @@
     src: "consul_exporter.service.j2"
     dest: "/etc/systemd/system/consul_exporter.service"
   notify:
-    - reload systemd-daemon
-    - restart consul_exporter
+    - "restart_consul_exporter_{{ ansible_distribution_version }}"
 
 - name: Ensure consul_exporter service started and enabled
   systemd:
