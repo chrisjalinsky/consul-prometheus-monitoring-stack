@@ -1,6 +1,6 @@
 ---
 
-prometheus_server_version: "1.0.1"
+prometheus_server_version: "1.7.1"
 prometheus_server_bin_dir: "/usr/local/bin"
 prometheus_server_config_dir: "/etc/prometheus"
 prometheus_server_logs_dir: "/etc/prometheus/logs"

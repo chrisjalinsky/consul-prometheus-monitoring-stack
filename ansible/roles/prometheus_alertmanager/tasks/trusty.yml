@@ -13,3 +13,9 @@
     dest: "/etc/init/alertmanager.conf"
   notify:
     - restart alertmanager
+
+- name: Ensure alertmanager service started and enabled
+  service:
+    name: alertmanager
+    enabled: yes
+    state: started

@@ -14,3 +14,8 @@
   notify:
     - reload systemd-daemon
     - restart prometheus
+
+- name: Ensure prometheus service started and enabled
+  systemd:
+    name: prometheus
+    state: started

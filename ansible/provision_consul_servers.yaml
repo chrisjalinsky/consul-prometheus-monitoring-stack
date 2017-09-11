@@ -7,7 +7,7 @@
   roles:
     - role: consul
       consul_type: "server"
-      consul_version: "0.6.4"
+      consul_version: "0.9.1"
       consul_log_level: "DEBUG"
       consul_advertise_iface: "eth1"
       consul_server_list_lookup_interface: 'ansible_eth1'

@@ -1,26 +1,10 @@
 ---
 
-- name: Ensure grafana_unarchive_prefix location exists
-  file:
-    dest: "{{ grafana_unarchive_prefix }}"
-    state: directory
-
-- name: Ensure grafana gpg-key present
-  apt_key:
-    url: "https://packagecloud.io/gpg.key"
-    state: present
-
-- name: Ensure grafana apt repository present
-  apt_repository:
-    repo: "deb https://packagecloud.io/grafana/stable/debian wheezy main"
-    state: present
-
-- name: Ensure grafana and dependencies present
+- name: Ensure deb downloaded and installed
   apt:
-    name: "grafana={{ grafana_version }}"
+    deb: "https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana_4.4.3_amd64.deb"
+    #allow_unauthenticated: yes
     state: present
-    update_cache: yes
-    cache_valid_time: 3600
 
 - name: Template config files for grafana
   template:

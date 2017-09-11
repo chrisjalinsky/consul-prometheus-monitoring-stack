@@ -13,3 +13,9 @@
     dest: "/etc/init/node_exporter.conf"
   notify:
     - restart node_exporter
+
+- name: Ensure node_exporter service started and enabled
+  service:
+    name: node_exporter
+    enabled: yes
+    state: started

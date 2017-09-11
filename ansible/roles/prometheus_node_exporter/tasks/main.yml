@@ -10,7 +10,7 @@
 
 - name: Download Prometheus Node Exporter release tarball
   get_url:
-    url: "https://github.com/prometheus/node_exporter/releases/download/{{ prometheus_node_exporter_version }}/node_exporter-{{ prometheus_node_exporter_version }}.linux-amd64.tar.gz"
+    url: "https://github.com/prometheus/node_exporter/releases/download/v{{ prometheus_node_exporter_version }}/node_exporter-{{ prometheus_node_exporter_version }}.linux-amd64.tar.gz"
     dest: "/opt/prometheus_node_exporter_{{ prometheus_node_exporter_version }}/node_exporter-{{ prometheus_node_exporter_version }}.linux-amd64.tar.gz"
 
 - name: Unarchive Prometheus tarball
@@ -43,9 +43,3 @@
 - name: Include trusty when distro less than 16.04
   when: ansible_distribution_version|version_compare('16.04','<')
   include: trusty.yml
-
-- name: Ensure node_exporter service started and enabled
-  service:
-    name: node_exporter
-    enabled: yes
-    state: started

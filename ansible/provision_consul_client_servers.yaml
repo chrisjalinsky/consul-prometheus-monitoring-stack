@@ -8,7 +8,7 @@
   roles:
     - role: consul
       consul_type: "client"
-      consul_version: "0.6.4"
+      consul_version: "0.9.1"
       consul_log_level: "DEBUG"
       consul_advertise_iface: 'eth1'
       consul_advertise_addr: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}"
@@ -39,7 +39,7 @@
   roles:
     - role: consul
       consul_type: "client"
-      consul_version: "0.6.4"
+      consul_version: "0.9.1"
       consul_log_level: "DEBUG"
       consul_advertise_iface: 'eth1'
       consul_advertise_addr: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}"

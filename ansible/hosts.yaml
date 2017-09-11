@@ -3,7 +3,7 @@ core_servers:
   hosts: [ core1.lan ]
   vars:
     ansible_ssh_user: vagrant
-    ansible_ssh_private_key_file: "~/.vagrant.d/insecure_private_key" 
+    ansible_ssh_private_key_file: "~/.vagrant.d/insecure_private_key"
 prometheus_servers:
   hosts: [ prometheus1.lan, prometheus2.lan ]
   vars:

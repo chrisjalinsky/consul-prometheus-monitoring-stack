@@ -6,7 +6,7 @@ After=network.target
 User={{ consul_user }}
 Group={{ consul_group }}
 Environment="GOMAXPROCS=2"
-ExecStart={{ consul_executable }} agent -config-dir {{ consul_conf_path }}
+ExecStart={{ consul_executable }} agent -enable-script-checks=true -config-dir {{ consul_conf_path }}
 ExecReload=/bin/kill -9 $MAINPID
 KillSignal=SIGINT
 Restart=on-failure

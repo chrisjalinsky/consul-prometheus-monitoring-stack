@@ -9,17 +9,6 @@
     - dest: "{{ consul_conf_path }}"
     - dest: "{{ consul_datadir }}"
 
-- name: Ensure Consul UI paths exist when server
-  when: consul_type == 'server'
-  file:
-    dest: "{{ item.dest }}"
-    state: "{{ item.state | default('directory') }}"
-    recurse: "{{ item.recurse | default('yes') }}"
-    owner: "{{ item.owner | default('root') }}"
-    group: "{{ item.group | default('root') }}"
-  with_items:
-    - dest: "{{ consul_ui_path }}"
-
 - name: Ensure Consul apt dependencies are met
   apt:
     name: "{{ item.name }}"
@@ -39,19 +28,6 @@
       dest: "{{ consul_bin_path }}"
       creates: "{{ consul_executable }}"
 
-- name: Download Consul UI and unzip to {{ consul_ui_path }} when server
-  when: consul_type == 'server'
-  unarchive:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    copy: "no"
-    mode: "0775"
-    creates: "{{ item.creates }}"
-  with_items:
-    - src: "{{ consul_ui_url }}"
-      dest: "{{ consul_ui_path }}"
-      creates: "{{ consul_ui_path }}/index.html"
-
 - name: Include xenial when distro greater than 14.04
   when: ansible_distribution_version|version_compare('14.04','>')
   include: xenial.yml
@@ -66,7 +42,7 @@
     content: "{{ consul_services_hash | to_nice_json(indent=2) }}"
     dest: "{{ consul_conf_path }}/services.json"
   notify:
-    - "restart consul_{{consul_type}}"
+    - "restart consul_{{ consul_type }}"
 
 - name: Ensure Consul in desired state and enabled
   service:

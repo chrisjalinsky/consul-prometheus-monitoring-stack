@@ -13,3 +13,9 @@
     dest: "/etc/init/prometheus.conf"
   notify:
     - restart prometheus
+
+- name: Ensure prometheus service started and enabled
+  service:
+    name: prometheus
+    enabled: yes
+    state: started

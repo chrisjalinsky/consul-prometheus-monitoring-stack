@@ -1,6 +1,6 @@
 ---
 
-prometheus_alertmanager_version: "0.3.0"
+prometheus_alertmanager_version: "0.8.0"
 prometheus_alertmanager_bin_dir: "/usr/local/bin"
 prometheus_alertmanager_config_dir: "/etc/prometheus_alertmanager"
 prometheus_alertmanager_config_file: "{{ prometheus_alertmanager_config_dir }}/config.yml"

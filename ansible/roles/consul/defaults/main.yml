@@ -1,9 +1,9 @@
 consul_user: "root"
 consul_group: "root"
 
-consul_version: "0.6.4"
+consul_version: "0.9.3"
 consul_url: "https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_linux_amd64.zip"
-consul_ui_url: "https://releases.hashicorp.com/consul/{{ consul_version }}/consul_{{ consul_version }}_web_ui.zip"
+
 consul_apt_deps:
   - name: "unzip"
 
@@ -13,7 +13,6 @@ consul_executable: "{{ consul_bin_path }}/consul"
 
 consul_init_path: "/etc/init"
 consul_conf_path: "/etc/consul"
-consul_ui_path: "/opt/consul-ui"
 
 consul_desired_state: "started"
 
@@ -29,7 +28,7 @@ consul_datadir: "/var/lib/consul"
 consul_datacenter: "lan1"
 consul_enable_syslog: "true"
 consul_log_level: "DEBUG"
-consul_encrypt: "KnqifJT6qkF0X+Zx9spnjg=="
+consul_encrypt: "KnqifJT6qkF0X+Zx9saajg=="
 
 consul_server_list_lookup_interface: "eth0"
 

@@ -61,9 +61,3 @@
 - name: Include trusty when distro less than 16.04
   when: ansible_distribution_version|version_compare('16.04','<')
   include: trusty.yml
-
-- name: Ensure prometheus service started and enabled
-  service:
-    name: prometheus
-    enabled: yes
-    state: started

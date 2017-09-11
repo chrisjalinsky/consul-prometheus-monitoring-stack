@@ -1,6 +1,6 @@
 ---
 
-prometheus_consul_exporter_version: "0.2.0"
+prometheus_consul_exporter_version: "0.3.0"
 prometheus_consul_exporter_bin_dir: "/usr/local/bin"
 prometheus_consul_exporter_consul_server: "http://{{ inventory_hostname }}:8500"
 prometheus_consul_exporter_kv_prefix: "/"

@@ -14,3 +14,8 @@
   notify:
     - reload systemd-daemon
     - restart consul_exporter
+
+- name: Ensure consul_exporter service started and enabled
+  systemd:
+    name: consul_exporter
+    state: started

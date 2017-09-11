@@ -23,7 +23,7 @@ bind9_named_forward_zones: []
 #    file: "db.lan"
 #    transfer_hosts: []
 
-bind9_named_reverse_zones: []    
+bind9_named_reverse_zones: []
 #bind9_named_reverse_zones:
 #  - name: "136.17.in-addr.arpa"
 #    path: "/etc/bind/zones/master"
@@ -40,5 +40,3 @@ bind9_named_acls: []
 bind9_named_forwarders:
   - "8.8.8.8"
   - "8.8.4.4"
-    
-    
