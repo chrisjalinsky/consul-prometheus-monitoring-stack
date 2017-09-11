@@ -11,7 +11,7 @@ We install a HA Prometheus cluster for monitoring, metrics, alerting, and consul
 We install Haproxy to verify consul template functionality
 
 ### Overview
-* Create a superset DNS environment
+* Create [Bind9](https://wiki.debian.org/Bind9) DNS environment
 * Create [Consul](https://github.com/hashicorp/consul) cluster used for service discovery
 * Create [Prometheus](https://github.com/prometheus) Server cluster
 * Create [Prometheus AlertManager](https://github.com/prometheus/alertmanager) service on defined nodes
@@ -19,6 +19,7 @@ We install Haproxy to verify consul template functionality
 * Create Prometheus [Rules](https://prometheus.io/docs/querying/rules/)/[Alerts](https://prometheus.io/docs/alerting/rules/)
 * Create [Third Party Exporter](https://github.com/prometheus/consul_exporter)
 * Create [Grafana](https://github.com/grafana/grafana) service
+* Create [Haproxy](http://www.haproxy.org/) load balancer
 * Create [Consul Template](https://github.com/hashicorp/consul-template) service
 
 ### Vagrantfile
@@ -41,6 +42,13 @@ This will, by default, create:
 
 The ansible playbooks provision the nodes listed above. The Ansible roles have been created to work on Ubuntu 14 and Ubuntu 16 nodes, but the playbooks will need updated to use the correct network interface names, as well as changing the Vagrant box in the ```./ansible/hosts.yaml``` file.
 
+Run all playbooks in order:
+```
+cd ansible
+./run_playbooks.sh
+```
+
+Or manually run to playbooks:
 ```
 cd ansible
 ansible-playbook provision_bind9_servers.yaml -i inventory.py -u vagrant -k -b
@@ -50,6 +58,7 @@ ansible-playbook provision_prometheus_node_exporter_servers.yaml -i inventory.py
 ansible-playbook provision_prometheus_consul_exporter_servers.yaml -i inventory.py -u vagrant -k -b
 ansible-playbook provision_consul_servers.yaml inventory.py -i inventory.py -u vagrant -k -b
 ansible-playbook provision_consul_client_servers.yaml -i inventory.py -u vagrant -k -b
+ansible-playbook provision_consul_template_servers.yaml -i inventory.py -u vagrant -k -b
 ```
 
 ### Notable UIs
