@@ -1,0 +1,22 @@
+---
+
+- name: Create Consul Template systemd directory
+  file:
+    dest: "/etc/systemd/system"
+    state: directory
+    recurse: yes
+
+- name: Template Consul Template systemd service file
+  register: systemd_service_template
+  template:
+    src: "consul-template-service.service.j2"
+    dest: "/etc/systemd/system/consul_template.service"
+  notify:
+    - "reload systemd-daemon"
+    - "restart_consul_template_16.04"
+
+- name: Ensure consul_template service started
+  when: consul_template_template_list is defined and consul_template_template_list|length > 0
+  systemd:
+    name: consul-template-service
+    state: started

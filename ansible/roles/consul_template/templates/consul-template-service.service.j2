@@ -1,0 +1,12 @@
+[Unit]
+Description=Consul Template Service
+Documentation=https://github.com/hashicorp/consul-template
+
+[Service]
+ExecStart={{ consul_template_exec_dir }}/{{ consul_template_service_name }} \
+  -config="{{ consul_template_config_dest }}/consul_template_config.json"
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

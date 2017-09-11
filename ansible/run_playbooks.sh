@@ -25,5 +25,6 @@ run_playbook provision_prometheus_node_exporter_servers.yaml inventory.py instal
 run_playbook provision_prometheus_consul_exporter_servers.yaml inventory.py install.out
 run_playbook provision_consul_servers.yaml inventory.py install.out
 run_playbook provision_consul_client_servers.yaml inventory.py install.out
+run_playbook provision_consul_template_servers.yaml inventory.py install.out
 
 echo "Ending Installation at $(date)."

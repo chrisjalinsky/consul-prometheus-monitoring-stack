@@ -1,0 +1,47 @@
+{% raw %}global
+  description load balancer
+  stats socket /run/haproxy/admin.sock mode 660 level admin
+  stats timeout 30s
+  log /dev/log daemon notice
+  chroot /var/lib/haproxy
+  user haproxy
+  group haproxy
+  daemon
+  stats maxconn 128
+  maxconn 65536
+  spread-checks 5
+
+  # Default SSL material locations
+  ca-base /etc/ssl/certs
+  crt-base /etc/ssl/private
+
+  # Default ciphers to use on SSL-enabled listening sockets.
+  # For more information, see ciphers(1SSL).
+  ssl-default-bind-ciphers kEECDH+aRSA+AES:kRSA+AES:+AES256:RC4-SHA:!kEDH:!LOW:!EXP:!MD5:!aNULL:!eNULL
+
+defaults
+  log	global
+  mode	http
+  maxconn 16384
+  default-server inter 2s maxconn 8192
+  option dontlognull
+  #	option httpchk /heartbeat
+  option redispatch
+  timeout connect 5s
+  timeout client 180s
+  timeout server 180s
+
+listen stats :8888
+  stats enable
+  stats hide-version
+  stats realm Haproxy\ Statistics
+  stats uri /
+  stats auth admin:adminpw
+
+listen http-in
+  option httplog
+  option httpchk GET /metrics
+  http-check expect string TYPE
+  bind *:8000{{range service "prometheus"}}
+  server {{.Node}} {{.Address}}:{{.Port}} check{{end}}
+{% endraw %}

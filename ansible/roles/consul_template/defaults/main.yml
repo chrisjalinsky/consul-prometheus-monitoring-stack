@@ -1,0 +1,22 @@
+---
+
+consul_template_version: "0.19.3"
+consul_template_service_name: "consul-template"
+consul_template_url: "https://releases.hashicorp.com/{{ consul_template_service_name }}/{{ consul_template_version }}/{{ consul_template_service_name }}_{{ consul_template_version }}_linux_amd64.tgz"
+consul_template_parent_dir: "/opt"
+consul_template_exec_dir: "/usr/local/bin"
+consul_template_template_list: []
+#consul_template_template_list:
+#  - template: "haproxy.cfg.ctmpl"
+#    source: "/tmp/haproxy.cfg.ctmpl"
+#    destination: "/etc/haproxy/haproxy.cfg"
+#    command: "/etc/init.d/haproxy reload"
+#    command_timeout: "60s"
+#    perms: "0644"
+#    backup: "true"
+#    wait:
+#      min: "2s"
+#      max: "10s"
+
+consul_template_config_dest: "/etc/consul"
+consul_template_consul_address: "localhost:8500"

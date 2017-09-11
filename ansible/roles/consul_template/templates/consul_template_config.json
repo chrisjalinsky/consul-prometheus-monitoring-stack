@@ -1,0 +1,31 @@
+{
+  "consul": {
+    "address": "{{ consul_template_consul_address }}"
+  }
+{% if consul_template_template_list is defined and consul_template_template_list|length > 0 %},
+{% for tmpl in consul_template_template_list %}
+  "template": {
+{% if tmpl.command is defined %}
+    "command": "{{ tmpl.command }}",
+{% endif %}
+{% if tmpl.command_timeout is defined %}
+    "command_timeout": "{{ tmpl.command_timeout }}",
+{% endif %}
+{% if tmpl.perms is defined %}
+    "perms": "{{ tmpl.perms }}",
+{% endif %}
+{% if tmpl.backup is defined %}
+    "backup": {{ tmpl.backup }},
+{% endif %}
+{% if tmpl.wait is defined and tmpl.wait.min is defined and tmpl.wait.max is defined %}
+    "wait": {
+      "min": "{{ tmpl.wait.min }}",
+      "max": "{{ tmpl.wait.max }}"
+    },
+    "source": "{{ tmpl.source }}",
+    "destination": "{{ tmpl.destination }}"
+{% endif %}
+  }{% if not loop.last %},{% endif %}
+{% endfor %}
+{% endif %}
+}

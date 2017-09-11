@@ -14,6 +14,9 @@ consul[1:3].lan
 prometheus_servers
 prometheus_client_servers
 
+[consul_template_servers]
+client1.lan
+
 [prometheus_node_exporter_servers:children]
 prometheus_servers
 prometheus_client_servers

@@ -1,3 +1,5 @@
+---
+
 - name: Install Consul servers
   hosts: consul_servers
   become: yes

@@ -1,0 +1,23 @@
+---
+
+- name: Install Consul Template servers
+  hosts: consul_template_servers
+  become: yes
+  become_user: root
+  roles:
+    - role: haproxy
+      haproxy_apt_repo: True
+      haproxy_version: "1.5"
+    - role: consul_template
+      consul_template_consul_address: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:8500"
+      consul_template_template_list:
+        - template: "haproxy.cfg.ctmpl"
+          source: "/tmp/haproxy.cfg.ctmpl"
+          destination: "/etc/haproxy/haproxy.cfg"
+          command: "/etc/init.d/haproxy reload"
+          command_timeout: "60s"
+          perms: "0644"
+          backup: "true"
+          wait:
+            min: "2s"
+            max: "10s"

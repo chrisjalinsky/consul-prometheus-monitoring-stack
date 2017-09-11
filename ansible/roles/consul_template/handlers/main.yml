@@ -1,0 +1,22 @@
+---
+
+- name: reload systemd-daemon
+  shell: systemctl daemon-reload
+
+- name: restart consul_template
+  when: consul_template_template_list is defined and consul_template_template_list|length > 0
+  service:
+    name: consul-template-service
+    state: restarted
+
+- name: restart_consul_template_14.04
+  when: consul_template_template_list is defined and consul_template_template_list|length > 0
+  service:
+    name: consul-template-service
+    state: restarted
+
+- name: restart_consul_template_16.04
+  when: consul_template_template_list is defined and consul_template_template_list|length > 0
+  systemd:
+    name: consul-template-service
+    state: restarted

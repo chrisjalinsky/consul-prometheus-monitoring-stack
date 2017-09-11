@@ -1,0 +1,13 @@
+---
+
+- name: Ensure apt repo exists when specified
+  when: haproxy_apt_repo
+  apt_repository:
+    repo: "{{ haproxy_apt_ppa }}"
+    update_cache: yes
+
+- name: Install haproxy
+  apt:
+    name: "haproxy"
+    update_cache: yes
+    cache_valid_time: 3600

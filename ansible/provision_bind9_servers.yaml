@@ -36,9 +36,19 @@
           hosts:
             - 172.136.1.12
       bind9_named_reverse_zones:
-        - name: "136.17.in-addr.arpa"
+        - name: "2.136.172.in-addr.arpa"
           path: "/etc/bind/zones/master"
-          file: "db.136.17"
+          file: "db.2.136.172"
+          hosts:
+            - 172.136.1.12
+        - name: "3.136.172.in-addr.arpa"
+          path: "/etc/bind/zones/master"
+          file: "db.3.136.172"
+          hosts:
+            - 172.136.1.12
+        - name: "4.136.172.in-addr.arpa"
+          path: "/etc/bind/zones/master"
+          file: "db.4.136.172"
           hosts:
             - 172.136.1.12
       bind9_named_forwarder_zones:
@@ -47,19 +57,3 @@
       bind9_named_acls:
         - name: trusted
           allowed: "{{ fact_bind9_allowed_subnets }}"
-
-- name: Update resolv.conf to point to new bind9 server
-  hosts: all
-  become: yes
-  become_user: root
-  tasks:
-    - name: Replace nameserver line
-      lineinfile:
-        dest: "/etc/resolv.conf"
-        regexp: "^nameserver.*"
-        line: "nameserver 172.136.1.11"
-    - name: Replace search line
-      lineinfile:
-        dest: "/etc/resolv.conf"
-        regexp: "^search.*"
-        line: "search lan"

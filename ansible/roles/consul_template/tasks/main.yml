@@ -1,0 +1,52 @@
+---
+
+- name: Ensure Consul template dirs exists
+  file:
+    dest: "{{ item.dest }}"
+    state: "{{ item.state | default('directory') }}"
+  with_items:
+    - dest: "{{ consul_template_parent_dir }}/{{ consul_template_service_name }}-{{ consul_template_version }}"
+    - dest: "{{ consul_template_config_dest }}"
+
+- name: Ensure consul template downloaded
+  unarchive:
+    src: "{{ consul_template_url }}"
+    dest: "{{ consul_template_parent_dir }}/{{ consul_template_service_name }}-{{ consul_template_version }}/"
+    creates: "{{ consul_template_parent_dir }}/{{ consul_template_service_name }}-{{ consul_template_version }}/{{ consul_template_service_name }}"
+    remote_src: yes
+
+- name: Ensure 775 permissions on Consul Template binary
+  file:
+    dest: "{{ consul_template_parent_dir }}/{{ consul_template_service_name }}-{{ consul_template_version }}/{{ consul_template_service_name }}"
+    mode: "0775"
+
+- name: Symlink Consul Template binary to exec dir
+  file:
+    src: "{{ consul_template_parent_dir }}/{{ consul_template_service_name }}-{{ consul_template_version }}/{{ consul_template_service_name }}"
+    dest: "{{ consul_template_exec_dir }}/{{ consul_template_service_name }}"
+    state: link
+
+- name: Ensure Consul template config template written
+  template:
+    src: "consul_template_config.json"
+    dest: "{{ consul_template_config_dest }}/consul_template_config.json"
+  notify:
+    - restart_consul_template_{{ ansible_distribution_version }}
+
+- name: Ensure Consul templates created when specified
+  when: consul_template_template_list is defined and consul_template_template_list|length > 0
+  template:
+    src: "{{ item.template }}"
+    dest: "{{ item.source }}"
+  with_items: "{{ consul_template_template_list }}"
+  notify:
+    - "restart_consul_template_{{ ansible_distribution_version }}"
+
+
+- name: Include xenial when distro greater than 14.04
+  when: ansible_distribution_version|version_compare('14.04','>')
+  include: xenial.yml
+
+- name: Include trusty when distro less than 16.04
+  when: ansible_distribution_version|version_compare('16.04','<')
+  include: trusty.yml

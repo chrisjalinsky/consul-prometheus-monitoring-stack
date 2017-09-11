@@ -1,0 +1,5 @@
+---
+
+haproxy_version: "1.5"
+haproxy_apt_repo: False
+haproxy_apt_ppa: "ppa:vbernat/haproxy-{{ haproxy_version }}"

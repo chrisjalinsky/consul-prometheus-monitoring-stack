@@ -1,0 +1,22 @@
+---
+
+- name: Create Consul Template upstart directory
+  file:
+    dest: "/etc/init"
+    state: directory
+    recurse: yes
+
+- name: Template Consul Template upstart service file
+  register: upstart_service_template
+  template:
+    src: "consul-template-service.conf.j2"
+    dest: "/etc/init/consul-template-service.conf"
+  notify:
+    - "restart_consul_template_14.04"
+
+- name: Ensure consul_template service started and enabled
+  when: consul_template_template_list is defined and consul_template_template_list|length > 0
+  service:
+    name: consul-template-service
+    enabled: yes
+    state: started

@@ -1,0 +1,18 @@
+;
+; BIND reverse data file for local loopback interface
+;
+$TTL    604800
+@       IN      SOA     {{ ansible_fqdn }}. admin.{{ ansible_fqdn }}. (
+                              {{ bind9_rev_serial }}         ; Serial
+                         604800         ; Refresh
+                          86400         ; Retry
+                        2419200         ; Expire
+                         604800 )       ; Negative Cache TTL
+
+; name servers - NS records
+      IN      NS      core1.lan.
+      IN      NS      core2.lan.
+
+; PTR Records
+11 IN      PTR     client1.lan.     ; 172.136.3.11
+12 IN      PTR     client2.lan.     ; 172.136.3.12
