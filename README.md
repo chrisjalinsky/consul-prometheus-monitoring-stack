@@ -7,6 +7,9 @@ We install a Consul cluster for service discovery and DNS
 ## HA Prometheus Cluster
 We install a HA Prometheus cluster for monitoring, metrics, alerting, and consul forwarding
 
+## Haproxy load balancing
+We install Haproxy to verify consul template functionality
+
 ### Overview
 * Create a superset DNS environment
 * Create [Consul](https://github.com/hashicorp/consul) cluster used for service discovery
@@ -16,6 +19,7 @@ We install a HA Prometheus cluster for monitoring, metrics, alerting, and consul
 * Create Prometheus [Rules](https://prometheus.io/docs/querying/rules/)/[Alerts](https://prometheus.io/docs/alerting/rules/)
 * Create [Third Party Exporter](https://github.com/prometheus/consul_exporter)
 * Create [Grafana](https://github.com/grafana/grafana) service
+* Create [Consul Template](https://github.com/hashicorp/consul-template) service
 
 ### Vagrantfile
 
@@ -31,7 +35,7 @@ This will, by default, create:
 * consul1.lan - Consul Server, Consul Client, Prometheus node exporter
 * consul2.lan - Consul Server, Consul Client, Prometheus node exporter
 * consul3.lan - Consul Server, Consul Client, Prometheus node exporter
-* client1.lan - Consul Client, Prometheus node exporter
+* client1.lan - Consul Client, Prometheus node exporter, Consul Template service with Haproxy cfg template
 
 ### Ansible playbooks
 
@@ -55,10 +59,13 @@ ansible-playbook provision_consul_client_servers.yaml -i inventory.py -u vagrant
 * prometheus2.lan:9090
 
 **Grafana UIs:**
-* prometheus1.lan:3000
-* prometheus2.lan:3000
+* prometheus1.lan:3000 admin:admin
+* prometheus2.lan:3000 admin:admin
 
 **Consul UIs:**
 * consul1.lan:8500
 * consul2.lan:8500
 * consul3.lan:8500
+
+**Haproxy Admin:**
+* client1.lan:8888 admin:adminpw
