@@ -19,10 +19,11 @@ We install a HA Prometheus cluster for monitoring, metrics, alerting, and consul
 
 ### Vagrantfile
 
-To create the machines run:
+The Vagrantfile uses the ```./ansible/hosts.yaml``` to create the machines. This is also used as the inventory file for the plays listed below.
 ```
 vagrant up
 ```
+
 This will, by default, create:
 * core1.lan - bind9 DNS server, Consul Client
 * prometheus1.lan - Prometheus server, Prometheus AlertManager, Grafana server
@@ -33,17 +34,18 @@ This will, by default, create:
 * client1.lan - Consul Client, Prometheus node exporter
 
 ### Ansible playbooks
-The ansible playbooks provision the nodes listed above.
+
+The ansible playbooks provision the nodes listed above. The Ansible roles have been created to work on Ubuntu 14 and Ubuntu 16 nodes, but the playbooks will need updated to use the correct network interface names, as well as changing the Vagrant box in the ```./ansible/hosts.yaml``` file.
+
 ```
 cd ansible
 ansible-playbook provision_bind9_servers.yaml -i inventory.py -u vagrant -k -b
-ansible-playbook update_resolv.yaml inventory.py -i inventory.py -u vagrant -k -b
 ansible-playbook provision_prometheus_servers.yaml -i inventory.py -u vagrant -k -b
 ansible-playbook provision_prometheus_alertmanager_servers.yaml -i inventory.py -u vagrant -k -b
 ansible-playbook provision_prometheus_node_exporter_servers.yaml -i inventory.py -u vagrant -k -b
 ansible-playbook provision_prometheus_consul_exporter_servers.yaml -i inventory.py -u vagrant -k -b
 ansible-playbook provision_consul_servers.yaml inventory.py -i inventory.py -u vagrant -k -b
-ansible-playbook provision_consul_client_servers.yaml inventory.py -i inventory.py -u vagrant -k -b
+ansible-playbook provision_consul_client_servers.yaml -i inventory.py -u vagrant -k -b
 ```
 
 ### Notable UIs
