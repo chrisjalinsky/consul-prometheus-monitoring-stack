@@ -18,7 +18,6 @@
     src: "/opt/prometheus_node_exporter_{{ prometheus_node_exporter_version }}/node_exporter-{{ prometheus_node_exporter_version }}.linux-amd64.tar.gz"
     dest: "/opt/prometheus_node_exporter_{{ prometheus_node_exporter_version }}/"
     remote_src: yes
-    copy: no
     creates: "/opt/prometheus_node_exporter_{{ prometheus_node_exporter_version }}/node_exporter-{{ prometheus_node_exporter_version }}.linux-amd64/node_exporter"
 
 - name: Ensure 775 permissions on Prometheus Node Exporter binary
@@ -35,15 +34,15 @@
 - name: Fail when expected and actual prometheus versions do not match
   shell: node_exporter -version
   register: node_exporter_version_output
-  failed_when: '"{{ prometheus_node_exporter_version }}" not in node_exporter_version_output.stdout'
+  failed_when: prometheus_node_exporter_version not in node_exporter_version_output.stdout
 
 - name: Include xenial when distro greater than 14.04
-  when: "{{ ansible_distribution_version > '14.04' }}"
+  when: ansible_distribution_version|version_compare('14.04','>')
   include: xenial.yml
 
 - name: Include trusty when distro less than 16.04
-  when: "{{ ansible_distribution_version < '16.04' }}"
-  include: trusty.yml 
+  when: ansible_distribution_version|version_compare('16.04','<')
+  include: trusty.yml
 
 - name: Ensure node_exporter service started and enabled
   service:

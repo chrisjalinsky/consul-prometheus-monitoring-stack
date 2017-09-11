@@ -28,7 +28,6 @@
     src: "/opt/prometheus_alertmanager_v{{ prometheus_alertmanager_version }}/alertmanager-{{ prometheus_alertmanager_version }}.linux-amd64.tar.gz"
     dest: "/opt/prometheus_alertmanager_v{{ prometheus_alertmanager_version }}/"
     remote_src: yes
-    copy: no
     creates: "/opt/prometheus_alertmanager_v{{ prometheus_alertmanager_version }}/alertmanager-{{ prometheus_alertmanager_version }}.linux-amd64/alertmanager"
 
 - name: Ensure 775 permissions on Prometheus Alert Manager binary
@@ -45,7 +44,7 @@
 - name: Fail when expected and actual prometheus versions do not match
   shell: alertmanager -version
   register: alertmanager_version_output
-  failed_when: '"{{ prometheus_alertmanager_version }}" not in alertmanager_version_output.stdout'
+  failed_when: prometheus_alertmanager_version not in alertmanager_version_output.stdout
 
 - name: Template config file from prometheus_alertmanager_config_file variable
   copy:
@@ -53,12 +52,12 @@
     dest: "{{ prometheus_alertmanager_config_file }}"
 
 - name: Include xenial when distro greater than 14.04
-  when: "{{ ansible_distribution_version > '14.04' }}"
+  when: ansible_distribution_version|version_compare('14.04','>')
   include: xenial.yml
 
 - name: Include trusty when distro less than 16.04
-  when: "{{ ansible_distribution_version < '16.04' }}"
-  include: trusty.yml 
+  when: ansible_distribution_version|version_compare('16.04','<')
+  include: trusty.yml
 
 - name: Ensure alertmanager service started and enabled
   service:

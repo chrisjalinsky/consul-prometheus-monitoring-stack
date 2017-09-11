@@ -1,4 +1,4 @@
---- 
+---
 
 - name: Ensure Consul conf paths exist
   file:
@@ -53,11 +53,11 @@
       creates: "{{ consul_ui_path }}/index.html"
 
 - name: Include xenial when distro greater than 14.04
-  when: "{{ ansible_distribution_version > '14.04' }}"
+  when: ansible_distribution_version|version_compare('14.04','>')
   include: xenial.yml
 
 - name: Include trusty when distro less than 16.04
-  when: "{{ ansible_distribution_version < '16.04' }}"
+  when: ansible_distribution_version|version_compare('16.04','<')
   include: trusty.yml
 
 - name: Add consul services when specified

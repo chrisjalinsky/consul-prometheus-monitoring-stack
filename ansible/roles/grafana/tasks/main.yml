@@ -32,10 +32,10 @@
   notify:
     - Restart grafana-server
 
-- name: Ensure grafana starts on boot
-  command: "update-rc.d {{ grafana_service }} defaults 95 10"
+#- name: Ensure grafana starts on boot
+#  command: "update-rc.d {{ grafana_service }} defaults 95 10"
 
-- name: Ensure grafana started
+- name: Ensure grafana started and enabled
   service:
     name: "{{ grafana_service }}"
     state: started

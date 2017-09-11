@@ -21,7 +21,6 @@
     src: "/opt/prometheus_v{{ prometheus_server_version }}/prometheus-{{ prometheus_server_version }}.linux-amd64.tar.gz"
     dest: "/opt/prometheus_v{{ prometheus_server_version }}/"
     remote_src: yes
-    copy: no
     creates: "/opt/prometheus_v{{ prometheus_server_version }}/prometheus-{{ prometheus_server_version }}.linux-amd64/prometheus"
 
 - name: Ensure 775 permissions on prometheus binary
@@ -38,7 +37,8 @@
 - name: Fail when expected and actual prometheus versions do not match
   shell: prometheus -version
   register: prometheus_version_output
-  failed_when: '"{{ prometheus_server_version }}" not in prometheus_version_output.stdout'
+  changed_when: True
+  failed_when: prometheus_server_version not in prometheus_version_output.stdout
 
 - name: Create rules files when specified in prometheus_server_config_file
   when: prometheus_server_config_file is defined and prometheus_server_config_file['rule_files'] is defined and prometheus_server_config_file['rule_files']|length > 0
@@ -55,11 +55,11 @@
     - restart prometheus
 
 - name: Include xenial when distro greater than 14.04
-  when: "{{ ansible_distribution_version > '14.04' }}"
+  when: ansible_distribution_version|version_compare('14.04','>')
   include: xenial.yml
 
 - name: Include trusty when distro less than 16.04
-  when: "{{ ansible_distribution_version < '16.04' }}"
+  when: ansible_distribution_version|version_compare('16.04','<')
   include: trusty.yml
 
 - name: Ensure prometheus service started and enabled

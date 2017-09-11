@@ -3,7 +3,7 @@
 - name: reload systemd-daemon
   shell: systemctl daemon-reload
 
-- name: restart node_exporter
+- name: restart consul_exporter
   service:
-    name: node_exporter
+    name: consul_exporter
     state: restarted
