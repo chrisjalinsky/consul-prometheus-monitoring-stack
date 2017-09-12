@@ -72,6 +72,7 @@ ansible-playbook provision_consul_template_servers.yaml -i inventory.py -u vagra
 
 **Check Forward DNS with nslookup:**
 
+DNS lookup the consul-exporter service:
 ```
 root@client1:~# nslookup prometheus.service.consul
 Server:		172.136.1.11
@@ -86,8 +87,20 @@ Name:	prometheus.service.consul
 Address: 172.136.2.11
 
 ```
+DNS lookup the grafana service:
+```
+root@client1:~# nslookup bind.service.consul
+Server:		172.136.1.11
+Address:	172.136.1.11#53
+
+Non-authoritative answer:
+Name:	bind.service.consul
+Address: 172.136.1.11
+```
 
 **Check reverse DNS with dig**
+
+DNS Reverse lookup a node ip address
 ```
 root@client1:~# dig -x 172.136.2.11
 

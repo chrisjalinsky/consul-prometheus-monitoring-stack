@@ -36,6 +36,11 @@
           hosts:
             - 172.136.1.12
       bind9_named_reverse_zones:
+        - name: "1.136.172.in-addr.arpa"
+          path: "/etc/bind/zones/master"
+          file: "db.1.136.172"
+          hosts:
+            - 172.136.1.12
         - name: "2.136.172.in-addr.arpa"
           path: "/etc/bind/zones/master"
           file: "db.2.136.172"
