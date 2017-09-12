@@ -1,16 +1,6 @@
-## Network Environment
-We install Bind9 DNS into the private network to resolve hostname A records and reverse DNS.
+# Consul Prometheus Monitoring Stack
 
-## Consul Cluster
-We install a Consul cluster for service discovery and DNS
-
-## HA Prometheus Cluster
-We install a HA Prometheus cluster for monitoring, metrics, alerting, and consul forwarding
-
-## Haproxy load balancing
-We install Haproxy to verify consul template functionality
-
-### Overview
+### Goals:
 * Create [Bind9](https://wiki.debian.org/Bind9) DNS environment
 * Create [Consul](https://github.com/hashicorp/consul) cluster used for service discovery
 * Create [Prometheus](https://github.com/prometheus) Server cluster
@@ -21,6 +11,18 @@ We install Haproxy to verify consul template functionality
 * Create [Grafana](https://github.com/grafana/grafana) service
 * Create [Haproxy](http://www.haproxy.org/) load balancer
 * Create [Consul Template](https://github.com/hashicorp/consul-template) service
+
+## Network Environment
+**GOAL:** Install Bind9 DNS master into the private network to resolve hostname A records and reverse DNS.
+
+## Consul Cluster
+**GOAL:** Install a 3 mode Consul cluster for service discovery and DNS
+
+## HA Prometheus Cluster
+**GOAL:** Install a HA Prometheus cluster for monitoring, metrics, alerting, and consul forwarding
+
+## Haproxy load balancing
+**GOAL:** Install Haproxy to verify consul template functionality
 
 ### Vagrantfile
 
