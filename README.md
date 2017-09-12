@@ -81,41 +81,33 @@ Non-authoritative answer:
 Name:	prometheus.service.consul
 Address: 172.136.2.12
 Name:	prometheus.service.consul
-Address: 172.136.2.11
-Name:	prometheus.service.consul
-Address: 172.136.1.11
-Name:	prometheus.service.consul
-Address: 172.136.4.12
-Name:	prometheus.service.consul
-Address: 172.136.4.11
-Name:	prometheus.service.consul
 Address: 172.136.2.13
 Name:	prometheus.service.consul
-Address: 172.136.3.11
+Address: 172.136.2.11
 
 ```
 
 **Check reverse DNS with dig**
 ```
-root@client1:~# dig -x 172.136.2.12
+root@client1:~# dig -x 172.136.2.11
 
-; <<>> DiG 9.9.5-3ubuntu0.14-Ubuntu <<>> -x 172.136.2.12
+; <<>> DiG 9.9.5-3ubuntu0.14-Ubuntu <<>> -x 172.136.2.11
 ;; global options: +cmd
 ;; Got answer:
-;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 31810
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 17545
 ;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 2, ADDITIONAL: 3
 
 ;; OPT PSEUDOSECTION:
 ; EDNS: version: 0, flags:; udp: 4096
 ;; QUESTION SECTION:
-;12.2.136.172.in-addr.arpa.	IN	PTR
+;11.2.136.172.in-addr.arpa.	IN	PTR
 
 ;; ANSWER SECTION:
-12.2.136.172.in-addr.arpa. 604800 IN	PTR	consul2.lan.
+11.2.136.172.in-addr.arpa. 604800 IN	PTR	consul1.lan.
 
 ;; AUTHORITY SECTION:
-2.136.172.in-addr.arpa.	604800	IN	NS	core1.lan.
 2.136.172.in-addr.arpa.	604800	IN	NS	core2.lan.
+2.136.172.in-addr.arpa.	604800	IN	NS	core1.lan.
 
 ;; ADDITIONAL SECTION:
 core1.lan.		604800	IN	A	172.136.1.11
@@ -123,24 +115,32 @@ core2.lan.		604800	IN	A	172.136.1.12
 
 ;; Query time: 4 msec
 ;; SERVER: 172.136.1.11#53(172.136.1.11)
-;; WHEN: Tue Sep 12 00:19:57 UTC 2017
+;; WHEN: Tue Sep 12 03:17:20 UTC 2017
 ;; MSG SIZE  rcvd: 151
 ```
 
 ### Notable UIs
 
 **Prometheus Server UIs:**
-* prometheus1.lan:9090
-* prometheus2.lan:9090
+* [Prometheus UI on prometheus1.lan](http://prometheus1.lan:9090)
+* [Prometheus UI on prometheus2.lan](http://prometheus2.lan:9090)
+* [Load Balanced Prometheus UI](http://client1.lan:9090)
 
 **Grafana UIs:**
-* prometheus1.lan:3000 admin:admin
-* prometheus2.lan:3000 admin:admin
+
+Additionally, Create a new prometheus datasource in Grafana.
+
+* [Grafana UI on prometheus1.lan](http://prometheus1.lan:3000) admin:admin
+* [Grafana UI on prometheus2.lan](http://prometheus2.lan:3000) admin:admin
+* [Load Balanced Grafana UI](http://client1.lan:3000) (Load balanced)
 
 **Consul UIs:**
-* consul1.lan:8500
-* consul2.lan:8500
-* consul3.lan:8500
+* [Consul 1 Admin UI](http://consul1.lan:8500/ui/#)
+* [Consul 2 Admin UI](http://consul2.lan:8500/ui/#)
+* [Consul 3 Admin UI](http://consul3.lan:8500/ui/#)
 
 **Haproxy Admin:**
-* client1.lan:8888 admin:adminpw
+
+To illustrate the usage of consul template, Grafana and the Prometheus admin are load balanced:
+
+* [Haproxy Admin UI](http://client1.lan:8888) admin:adminpw
