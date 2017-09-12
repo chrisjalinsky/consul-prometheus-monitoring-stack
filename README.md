@@ -13,16 +13,17 @@
 * Create [Consul Template](https://github.com/hashicorp/consul-template) service
 
 ## Network Environment
-**GOAL:** Install Bind9 DNS master into the private network to resolve hostname A records and reverse DNS.
+**GOAL:** Install Bind9 DNS master into the private network to resolve hostname A records and PTR records and forward Consul DNS requests.
 
 ## Consul Cluster
-**GOAL:** Install a 3 mode Consul cluster for service discovery and DNS
+**GOAL:** Install a 3 mode Consul cluster for service discovery and DNS resolution.
 
 ## HA Prometheus Cluster
-**GOAL:** Install a HA Prometheus cluster for monitoring, metrics, alerting, and consul forwarding
+**GOAL:** Install a HA Prometheus cluster for monitoring, metrics, alerting, and integrate 3rd party exporters, like consul forwarding
 
 ## Haproxy load balancing
-**GOAL:** Install Haproxy to verify consul template functionality
+**GOAL:** Install Haproxy to verify consul template functionality. **TODO:** update Haproxy version from 1.5 to 1.7
+
 
 ### Vagrantfile
 
