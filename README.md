@@ -24,7 +24,12 @@ We install Haproxy to verify consul template functionality
 
 ### Vagrantfile
 
-The Vagrantfile uses the ```./ansible/hosts.yaml``` to create the machines. This is also used as the inventory file for the plays listed below.
+The Vagrantfile reads the ```./ansible/hosts.yaml``` to create the machines. This also serves as the inventory file for the plays listed below. You might want to use the great plugin [Vagrant HostsUpdater](https://github.com/cogitatio/vagrant-hostsupdater) to update your hypervisor's hostsfile:
+```
+vagrant plugin install vagrant-hostsupdater
+```
+
+Spin up the infrastructure:
 ```
 vagrant up
 ```
