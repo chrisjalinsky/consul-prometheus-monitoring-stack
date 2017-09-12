@@ -74,7 +74,7 @@ ansible-playbook provision_consul_template_servers.yaml -i inventory.py -u vagra
 
 **Check Forward DNS with nslookup:**
 
-DNS lookup the consul-exporter service:
+DNS lookup the node-exporter service:
 ```
 root@client1:~# nslookup prometheus.service.consul
 Server:		172.136.1.11
@@ -89,7 +89,7 @@ Name:	prometheus.service.consul
 Address: 172.136.2.11
 
 ```
-DNS lookup the grafana service:
+DNS lookup the bind service:
 ```
 root@client1:~# nslookup bind.service.consul
 Server:		172.136.1.11
@@ -99,6 +99,20 @@ Non-authoritative answer:
 Name:	bind.service.consul
 Address: 172.136.1.11
 ```
+
+DNS lookup the grafana service:
+```
+root@client1:~# nslookup grafana.service.consul
+Server:		172.136.1.11
+Address:	172.136.1.11#53
+
+Non-authoritative answer:
+Name:	grafana.service.consul
+Address: 172.136.4.11
+Name:	grafana.service.consul
+Address: 172.136.4.12
+```
+
 
 **Check reverse DNS with dig**
 
@@ -155,7 +169,7 @@ Additionally, Create a new prometheus datasource in Grafana.
 * [Consul 2 Admin UI](http://consul2.lan:8500/ui/#)
 * [Consul 3 Admin UI](http://consul3.lan:8500/ui/#)
 
-Several Consul services are being used. TCP health checks and a script check on the DNS bind service.
+Several Consul services are being used. TCP health checks and a simple script check on the DNS bind service.
 
 **Haproxy Admin:**
 
