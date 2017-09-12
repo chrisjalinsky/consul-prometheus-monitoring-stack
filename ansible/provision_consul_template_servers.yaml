@@ -9,7 +9,7 @@
       haproxy_apt_repo: True
       haproxy_version: "1.5"
     - role: consul_template
-      consul_template_consul_address: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:8500"
+      consul_template_consul_address: "{{ hostvars[inventory_hostname]['ansible_enp0s8']['ipv4']['address'] }}:8500"
       consul_template_template_list:
         - template: "haproxy.cfg.ctmpl"
           source: "/var/tmp/haproxy.cfg.ctmpl"

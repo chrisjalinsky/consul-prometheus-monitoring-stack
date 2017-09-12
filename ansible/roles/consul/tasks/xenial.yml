@@ -30,7 +30,7 @@
     - src: "consul_client.json"
       dest: "/etc/consul/consul_client.json"
   notify:
-    - "restart_consul_server_{{ ansible_distribution_version }}"
+    - "restart_consul_client_{{ ansible_distribution_version }}"
 
 - name: Ensure Consul in desired state
   systemd:

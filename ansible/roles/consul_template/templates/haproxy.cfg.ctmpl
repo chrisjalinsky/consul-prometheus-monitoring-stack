@@ -31,7 +31,8 @@ defaults
   timeout client 180s
   timeout server 180s
 
-listen stats :8888
+listen stats
+  bind *:8888
   stats enable
   stats hide-version
   stats realm Haproxy\ Statistics

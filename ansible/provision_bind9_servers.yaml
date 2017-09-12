@@ -27,7 +27,7 @@
   roles:
     - role: bind9
       bind9_type: master
-      bind9_listen: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}"
+      bind9_listen: "{{ hostvars[inventory_hostname]['ansible_enp0s8']['ipv4']['address'] }}"
       bind9_named_allow_transfer: "any"
       bind9_named_forward_zones:
         - name: "lan"
@@ -58,7 +58,7 @@
             - 172.136.1.12
       bind9_named_forwarder_zones:
         - name: "consul"
-          hosts: "{{ hostvars | server_group_ip_port_map_v2(groups['consul_servers'], 'ansible_eth1', '8600') }}"
+          hosts: "{{ hostvars | server_group_ip_port_map_v2(groups['consul_servers'], 'ansible_enp0s8', '8600') }}"
       bind9_named_acls:
         - name: trusted
           allowed: "{{ fact_bind9_allowed_subnets }}"

@@ -10,9 +10,8 @@
   register: systemd_service_template
   template:
     src: "consul-template-service.service.j2"
-    dest: "/etc/systemd/system/consul_template.service"
+    dest: "/etc/systemd/system/consul-template-service.service"
   notify:
-    - "reload systemd-daemon"
     - "restart_consul_template_16.04"
 
 - name: Ensure consul_template service started

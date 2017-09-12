@@ -7,4 +7,4 @@
   become_user: root
   roles:
     - role: hostsfile
-      hostsfile_iface: "ansible_eth1"
+      hostsfile_iface: "ansible_enp0s8"

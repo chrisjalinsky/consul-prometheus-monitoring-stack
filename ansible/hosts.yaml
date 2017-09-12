@@ -38,22 +38,22 @@ _meta:
   hostvars:
     core1.lan:
       vagrant_ip: "172.136.1.11"
-      vagrant_box: "ubuntu/trusty64"
+      vagrant_box: "bento/ubuntu-16.04"
     prometheus1.lan:
       vagrant_ip: "172.136.4.11"
-      vagrant_box: "ubuntu/trusty64"
+      vagrant_box: "bento/ubuntu-16.04"
     prometheus2.lan:
       vagrant_ip: "172.136.4.12"
-      vagrant_box: "ubuntu/trusty64"
+      vagrant_box: "bento/ubuntu-16.04"
     client1.lan:
       vagrant_ip: "172.136.3.11"
-      vagrant_box: "ubuntu/trusty64"
+      vagrant_box: "bento/ubuntu-16.04"
     consul1.lan:
       vagrant_ip: "172.136.2.11"
-      vagrant_box: "ubuntu/trusty64"
+      vagrant_box: "bento/ubuntu-16.04"
     consul2.lan:
       vagrant_ip: "172.136.2.12"
-      vagrant_box: "ubuntu/trusty64"
+      vagrant_box: "bento/ubuntu-16.04"
     consul3.lan:
       vagrant_ip: "172.136.2.13"
-      vagrant_box: "ubuntu/trusty64"
+      vagrant_box: "bento/ubuntu-16.04"
