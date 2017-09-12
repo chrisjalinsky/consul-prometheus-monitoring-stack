@@ -1,16 +1,16 @@
 # Consul Prometheus Monitoring Stack
 
 ### Goals:
-* Create [Bind9](https://wiki.debian.org/Bind9){:target="_blank"} DNS environment
-* Create [Consul](https://github.com/hashicorp/consul){:target="_blank"} cluster used for service discovery
-* Create [Prometheus](https://github.com/prometheus){:target="_blank"} Server cluster
-* Create [Prometheus AlertManager](https://github.com/prometheus/alertmanager){:target="_blank"} service on defined nodes
-* Create [Prometheus NodeExporter](https://github.com/prometheus/node_exporter){:target="_blank"} service on defined nodes
-* Create Prometheus [Rules](https://prometheus.io/docs/querying/rules/)/[Alerts](https://prometheus.io/docs/alerting/rules/){:target="_blank"}
-* Create [Third Party Exporter](https://github.com/prometheus/consul_exporter){:target="_blank"}
-* Create [Grafana](https://github.com/grafana/grafana){:target="_blank"} service
-* Create [Haproxy](http://www.haproxy.org/){:target="_blank"} load balancer
-* Create [Consul Template](https://github.com/hashicorp/consul-template){:target="_blank"} service
+* Create [Bind9](https://wiki.debian.org/Bind9) DNS environment
+* Create [Consul](https://github.com/hashicorp/consul) cluster used for service discovery
+* Create [Prometheus](https://github.com/prometheus) Server cluster
+* Create [Prometheus AlertManager](https://github.com/prometheus/alertmanager) service on defined nodes
+* Create [Prometheus NodeExporter](https://github.com/prometheus/node_exporter) service on defined nodes
+* Create Prometheus [Rules](https://prometheus.io/docs/querying/rules/)/[Alerts](https://prometheus.io/docs/alerting/rules/)
+* Create [Third Party Exporter](https://github.com/prometheus/consul_exporter)
+* Create [Grafana](https://github.com/grafana/grafana) service
+* Create [Haproxy](http://www.haproxy.org/) load balancer
+* Create [Consul Template](https://github.com/hashicorp/consul-template) service
 
 ## Network Environment
 **GOAL:** Install Bind9 DNS master into the private network to resolve hostname A records and reverse DNS.
@@ -26,7 +26,7 @@
 
 ### Vagrantfile
 
-The Vagrantfile reads the ```./ansible/hosts.yaml``` to create the machines. This also serves as the inventory file for the plays listed below. You might want to use the great plugin [Vagrant HostsUpdater](https://github.com/cogitatio/vagrant-hostsupdater){:target="_blank"} to update your hypervisor's hostsfile:
+The Vagrantfile reads the ```./ansible/hosts.yaml``` to create the machines. This also serves as the inventory file for the plays listed below. You might want to use the great plugin [Vagrant HostsUpdater](https://github.com/cogitatio/vagrant-hostsupdater) to update your hypervisor's hostsfile:
 ```
 vagrant plugin install vagrant-hostsupdater
 ```
@@ -135,25 +135,25 @@ core2.lan.		604800	IN	A	172.136.1.12
 ### Notable UIs
 
 **Prometheus Server UIs:**
-* [Prometheus UI on prometheus1.lan](http://prometheus1.lan:9090){:target="_blank"}
-* [Prometheus UI on prometheus2.lan](http://prometheus2.lan:9090){:target="_blank"}
-* [Load Balanced Prometheus UI](http://client1.lan:9090){:target="_blank"}
+* [Prometheus UI on prometheus1.lan](http://prometheus1.lan:9090)
+* [Prometheus UI on prometheus2.lan](http://prometheus2.lan:9090)
+* [Load Balanced Prometheus UI](http://client1.lan:9090)
 
 **Grafana UIs:**
 
 Additionally, Create a new prometheus datasource in Grafana.
 
-* [Grafana UI on prometheus1.lan](http://prometheus1.lan:3000){:target="_blank"} admin:admin
-* [Grafana UI on prometheus2.lan](http://prometheus2.lan:3000){:target="_blank"} admin:admin
-* [Load Balanced Grafana UI](http://client1.lan:3000){:target="_blank"} (Load balanced)
+* [Grafana UI on prometheus1.lan](http://prometheus1.lan:3000) admin:admin
+* [Grafana UI on prometheus2.lan](http://prometheus2.lan:3000) admin:admin
+* [Load Balanced Grafana UI](http://client1.lan:3000) (Load balanced)
 
 **Consul UIs:**
-* [Consul 1 Admin UI](http://consul1.lan:8500/ui/#){:target="_blank"}
-* [Consul 2 Admin UI](http://consul2.lan:8500/ui/#){:target="_blank"}
-* [Consul 3 Admin UI](http://consul3.lan:8500/ui/#){:target="_blank"}
+* [Consul 1 Admin UI](http://consul1.lan:8500/ui/#)
+* [Consul 2 Admin UI](http://consul2.lan:8500/ui/#)
+* [Consul 3 Admin UI](http://consul3.lan:8500/ui/#)
 
 **Haproxy Admin:**
 
 To illustrate the usage of consul template, Grafana and the Prometheus admin are load balanced:
 
-* [Haproxy Admin UI](http://client1.lan:8888){:target="_blank"} admin:adminpw
+* [Haproxy Admin UI](http://client1.lan:8888) admin:adminpw
