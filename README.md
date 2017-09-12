@@ -68,6 +68,65 @@ ansible-playbook provision_consul_client_servers.yaml -i inventory.py -u vagrant
 ansible-playbook provision_consul_template_servers.yaml -i inventory.py -u vagrant -k -b
 ```
 
+### Verify Consul DNS:
+
+**Check Forward DNS with nslookup:**
+
+```
+root@client1:~# nslookup prometheus.service.consul
+Server:		172.136.1.11
+Address:	172.136.1.11#53
+
+Non-authoritative answer:
+Name:	prometheus.service.consul
+Address: 172.136.2.12
+Name:	prometheus.service.consul
+Address: 172.136.2.11
+Name:	prometheus.service.consul
+Address: 172.136.1.11
+Name:	prometheus.service.consul
+Address: 172.136.4.12
+Name:	prometheus.service.consul
+Address: 172.136.4.11
+Name:	prometheus.service.consul
+Address: 172.136.2.13
+Name:	prometheus.service.consul
+Address: 172.136.3.11
+
+```
+
+**Check reverse DNS with dig**
+```
+root@client1:~# dig -x 172.136.2.12
+
+; <<>> DiG 9.9.5-3ubuntu0.14-Ubuntu <<>> -x 172.136.2.12
+;; global options: +cmd
+;; Got answer:
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 31810
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 2, ADDITIONAL: 3
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+;; QUESTION SECTION:
+;12.2.136.172.in-addr.arpa.	IN	PTR
+
+;; ANSWER SECTION:
+12.2.136.172.in-addr.arpa. 604800 IN	PTR	consul2.lan.
+
+;; AUTHORITY SECTION:
+2.136.172.in-addr.arpa.	604800	IN	NS	core1.lan.
+2.136.172.in-addr.arpa.	604800	IN	NS	core2.lan.
+
+;; ADDITIONAL SECTION:
+core1.lan.		604800	IN	A	172.136.1.11
+core2.lan.		604800	IN	A	172.136.1.12
+
+;; Query time: 4 msec
+;; SERVER: 172.136.1.11#53(172.136.1.11)
+;; WHEN: Tue Sep 12 00:19:57 UTC 2017
+;; MSG SIZE  rcvd: 151
+```
+
 ### Notable UIs
 
 **Prometheus Server UIs:**

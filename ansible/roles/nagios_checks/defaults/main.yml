@@ -1,0 +1,7 @@
+---
+
+nagios_checks_templates_dir: "/usr/lib/nagios/plugins/custom"
+nagios_checks_templates_list: []
+#nagios_checks_templates_list:
+#  - src: "check_bind.j2"
+#    dest: "/usr/lib/nagios/plugins/custom/check_bind"

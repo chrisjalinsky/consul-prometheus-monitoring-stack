@@ -38,10 +38,24 @@ listen stats :8888
   stats uri /
   stats auth admin:adminpw
 
-listen http-in
+listen prometheusserver
+  option httplog
+  option httpchk GET /status
+  http-check expect string Version
+  bind *:9090{{range service "prometheusserver"}}
+  server {{.Node}} {{.Address}}:{{.Port}} check{{end}}
+
+listen prometheusnode
   option httplog
   option httpchk GET /metrics
   http-check expect string TYPE
-  bind *:8000{{range service "prometheus"}}
+  bind *:9010{{range service "prometheusnode"}}
+  server {{.Node}} {{.Address}}:{{.Port}} check{{end}}
+
+listen grafana
+  option httplog
+  option httpchk GET /login
+  http-check expect string Grafana
+  bind *:3000{{range service "grafana"}}
   server {{.Node}} {{.Address}}:{{.Port}} check{{end}}
 {% endraw %}

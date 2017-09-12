@@ -1,7 +1,7 @@
 ---
 
-- name: Install clients with Consul
-  hosts: consul_client_servers
+- name: Install Prometheus clients with Consul
+  hosts: prometheus_client_servers
   become: yes
   become_user: root
   gather_facts: yes
@@ -20,20 +20,20 @@
       #consul_server_list: "{{ hostvars | server_group_ip_map_v2(groups['consul_servers'], 'ansible_eth1') }}"
       consul_services_hash:
         services:
-          - name: prometheus
+          - name: prometheusnode
             tags:
-            - prometheus
+            - prometheusnode
             - node-exporter
             address: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}"
             port: 9100
             checks:
-            - id: prometheus_check_2
+            - id: prometheusnode_check_1
               name: Prometheus node-exporter TCP on port 9100
               tcp: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:9100"
               interval: 10s
               timeout: 1s
 
-- name: Install clients with Consul
+- name: Install Bind9 clients with Consul
   hosts: core_servers
   become: yes
   become_user: root
@@ -41,6 +41,10 @@
   vars_files:
     - vars/makevault.yml
   roles:
+    - role: nagios_checks
+      nagios_checks_templates_list:
+        - src: "check_bind.j2"
+          dest: "/usr/lib/nagios/plugins/custom/check_bind"
     - role: consul
       consul_type: "client"
       consul_version: "0.9.1"
@@ -53,15 +57,55 @@
       #consul_server_list: "{{ hostvars | server_group_ip_map_v2(groups['consul_servers'], 'ansible_eth1') }}"
       consul_services_hash:
         services:
-          - name: prometheus
+          - name: bind
             tags:
-            - prometheus
-            - node-exporter
-            address: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}"
-            port: 9100
+            - dns
             checks:
-            - id: prometheus_check_1
-              name: Prometheus node-exporter TCP on port 9100
-              tcp: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:9100"
-              interval: 10s
-              timeout: 1s
+              - id: bind_dns_server_check
+                name: Check bind DNS script
+                script: "/usr/lib/nagios/plugins/custom/check_bind"
+                interval: 10s
+                timeout: 1s
+
+- name: Install Prometheus servers with Consul clients for clustered service discovery
+  hosts: prometheus_servers
+  become: yes
+  become_user: root
+  gather_facts: yes
+  vars_files:
+    - vars/makevault.yml
+  roles:
+    - role: consul
+      consul_type: "client"
+      consul_version: "0.9.1"
+      consul_log_level: "DEBUG"
+      consul_advertise_iface: 'eth1'
+      consul_advertise_addr: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}"
+      consul_client_addr: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}"
+      consul_server_list: ["172.136.2.11", "172.136.2.12", "172.136.2.13"]
+      # Can this be hostnames?
+      #consul_server_list: "{{ hostvars | server_group_ip_map_v2(groups['consul_servers'], 'ansible_eth1') }}"
+      consul_services_hash:
+        services:
+          - name: grafana
+            tags:
+            - grafana
+            address: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}"
+            port: 3000
+            checks:
+              - id: grafana_check_prometheus_servers
+                name: Grafana TCP on port 3000
+                tcp: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:3000"
+                interval: 10s
+                timeout: 1s
+          - name: prometheusserver
+            tags:
+            - prometheusserver
+            address: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}"
+            port: 9090
+            checks:
+              - id: prometheus_check_prometheus_servers
+                name: Prometheus Server TCP on port 9090
+                tcp: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:9090"
+                interval: 10s
+                timeout: 1s
