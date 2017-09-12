@@ -1,3 +1,5 @@
+---
+
 - name: Install clients with Consul
   hosts: consul_client_servers
   become: yes
@@ -13,8 +15,9 @@
       consul_advertise_iface: 'eth1'
       consul_advertise_addr: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}"
       consul_client_addr: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}"
+      consul_server_list: ["172.136.2.11", "172.136.2.12", "172.136.2.13"]
       # Can this be hostnames?
-      consul_server_list: "{{ hostvars | server_group_ip_map_v2(groups['consul_servers'], 'ansible_eth1') }}"
+      #consul_server_list: "{{ hostvars | server_group_ip_map_v2(groups['consul_servers'], 'ansible_eth1') }}"
       consul_services_hash:
         services:
           - name: prometheus
@@ -45,9 +48,9 @@
       consul_advertise_iface: 'eth1'
       consul_advertise_addr: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}"
       consul_client_addr: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}"
-      #consul_server_list: ["172.136.2.11", "172.136.2.12", "172.136.2.13"]
+      consul_server_list: ["172.136.2.11", "172.136.2.12", "172.136.2.13"]
       # Can this be hostnames?
-      consul_server_list: "{{ hostvars | server_group_ip_map_v2(groups['consul_servers'], 'ansible_eth1') }}"
+      #consul_server_list: "{{ hostvars | server_group_ip_map_v2(groups['consul_servers'], 'ansible_eth1') }}"
       consul_services_hash:
         services:
           - name: prometheus

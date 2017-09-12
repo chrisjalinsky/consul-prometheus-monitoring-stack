@@ -17,8 +17,9 @@ function run_playbook () {
 
 echo "Beginning Installation at $(date)."
 
+run_playbook provision_hostsfile.yaml inventory.py install.out
 run_playbook provision_bind9_servers.yaml inventory.py install.out
-run_playbook update_resolv.yaml inventory.py install.out
+run_playbook provision_resolv_conf.yaml inventory.py install.out
 run_playbook provision_prometheus_servers.yaml inventory.py install.out
 run_playbook provision_prometheus_alertmanager_servers.yaml inventory.py install.out
 run_playbook provision_prometheus_node_exporter_servers.yaml inventory.py install.out

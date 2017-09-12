@@ -1,0 +1,23 @@
+---
+
+- name: Ensure hostname is set to inventory hostname
+  hostname:
+    name: "{{ inventory_hostname }}"
+
+- name: Ensure ubuntu 127.0.1.1 loopback is absent
+  lineinfile:
+    regexp: "^127\\.0\\.1\\.1\\s+.*"
+    state: absent
+    dest: "/etc/hosts"
+
+- name: Ensure 127.0.0.1 loopback resolve to hostname doesnt exist
+  lineinfile:
+    regexp: "^127\\.0\\.0\\.1\\s+{{ inventory_hostname }}.*"
+    state: absent
+    dest: "/etc/hosts"
+
+- name: Ensure ubuntu 127.0.0.1 loopback only contains localhost
+  lineinfile:
+    line: "127.0.0.1 localhost"
+    regexp: "^127\\.0\\.0\\.1\\s+localhost$"
+    dest: "/etc/hosts"

@@ -12,7 +12,7 @@
       consul_template_consul_address: "{{ hostvars[inventory_hostname]['ansible_eth1']['ipv4']['address'] }}:8500"
       consul_template_template_list:
         - template: "haproxy.cfg.ctmpl"
-          source: "/tmp/haproxy.cfg.ctmpl"
+          source: "/var/tmp/haproxy.cfg.ctmpl"
           destination: "/etc/haproxy/haproxy.cfg"
           command: "/etc/init.d/haproxy reload"
           command_timeout: "60s"

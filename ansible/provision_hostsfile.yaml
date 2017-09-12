@@ -1,0 +1,10 @@
+---
+
+- name: Fix hostsfile
+  hosts: all
+  gather_facts: no
+  become: yes
+  become_user: root
+  roles:
+    - role: hostsfile
+      hostsfile_iface: "ansible_eth1"
