@@ -1,4 +1,4 @@
-# Consul Prometheus Monitoring Stack
+# Consul Service Discovery and Prometheus Monitoring Stack
 
 ### Goals:
 * Create [Bind9](https://wiki.debian.org/Bind9) DNS environment
@@ -47,7 +47,9 @@ This will, by default, create:
 
 ### Ansible playbooks
 
-The ansible playbooks provision the nodes listed above. The Ansible roles have been created to work on Ubuntu 14 and Ubuntu 16 nodes, but the playbooks will need updated to use the correct network interface names, as well as changing the Vagrant box in the ```./ansible/hosts.yaml``` file.
+The ansible playbooks provision the nodes listed above. The Ansible roles have been created to work on Ubuntu 14 and Ubuntu 16 nodes, but the VMs have different network interface names, as well as Vagrant boxes.
+
+Checkout branch ```ubuntu16``` to use Ubuntu Xenial hosts.
 
 Run all playbooks in order:
 ```
@@ -142,6 +144,7 @@ core2.lan.		604800	IN	A	172.136.1.12
 **Grafana UIs:**
 
 Additionally, Create a new prometheus datasource in Grafana.
+**TODO** The load balanced Grafana endpoint needs session stickiness to handle authentication persistence
 
 * [Grafana UI on prometheus1.lan](http://prometheus1.lan:3000) admin:admin
 * [Grafana UI on prometheus2.lan](http://prometheus2.lan:3000) admin:admin
@@ -151,6 +154,8 @@ Additionally, Create a new prometheus datasource in Grafana.
 * [Consul 1 Admin UI](http://consul1.lan:8500/ui/#)
 * [Consul 2 Admin UI](http://consul2.lan:8500/ui/#)
 * [Consul 3 Admin UI](http://consul3.lan:8500/ui/#)
+
+Several Consul services are being used. TCP health checks and a script check on the DNS bind service.
 
 **Haproxy Admin:**
 
